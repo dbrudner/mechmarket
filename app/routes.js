@@ -1,6 +1,5 @@
 // app/routes.js
 const path = require('path')
-const mongoose = require('mongoose');
 const db = require('./models/index');
 const bodyParser = require('body-parser')
 
@@ -15,8 +14,9 @@ module.exports = function(app, passport) {
 
     // Get all keyboards
     app.get('/api/keyboards/all', (req, res) => {
-        getKeyboards()
-        res.json('hey')
+        const keyboards = getKeyboards()
+        console.log('keys', keyboards)
+        res.json(keyboards)
     })
 
     // Check if a user is logged in

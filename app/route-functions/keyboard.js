@@ -7,17 +7,17 @@ module.exports = {
             keyboard: 'new'
         }), function(err, result) {
             if (err) throw err;
-            console.log(result)
+            return result
         }
     },
 
     // Working
     getKeyboards() {
-        db.Keyboard.find({})
+        return db.Keyboard.find({})
         .exec((err, result) => {
-            console.log('hey')
-            console.log(result)
-            console.log(err)
+            console.log('res', result)
+            if (err) throw err;
+            return result;
         }) 
     }
 }
