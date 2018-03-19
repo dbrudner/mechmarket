@@ -3,9 +3,14 @@ const db = require('../models/index');
 
 module.exports = {
     postKeyboard(keyboardObject) {
-        console.log(db)        
-        db.Keyboard.insertOne({
-            keyboardObject
+        db.Keyboard.create({
+            keyboard: 'new'
+        })
+    },
+
+    getKeyboards() {
+        db.Keyboard.find({}, (err, res) => {
+            console.log(res)
         })
     }
 }

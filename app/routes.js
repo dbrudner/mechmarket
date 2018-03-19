@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const db = require('./models/index');
 const bodyParser = require('body-parser')
 
-const {postKeyboard} = require ('./route-functions/keyboard')
+const {postKeyboard, getKeyboards} = require ('./route-functions/keyboard')
 
-postKeyboard()
+getKeyboards()
 
 module.exports = function(app, passport) {
 
