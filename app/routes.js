@@ -4,17 +4,23 @@ const mongoose = require('mongoose');
 const db = require('./models/index');
 const bodyParser = require('body-parser')
 
+const {postKeyboard} = require ('./route-functions/keyboard')
 
+postKeyboard()
 
 module.exports = function(app, passport) {
 
+    app.post('/new/keyboard', (req, res) => {
+
+    })
+
     // Check if a user is logged in
-    app.get('/test', function(req, res) {
+    app.get('/test', (req, res) => {
         res.json(req.user)
     })
 
     // Logout
-    app.get('/logout', function(req, res){
+    app.get('/logout', (req, res) => {
         req.session.destroy();
         req.logout();
       });

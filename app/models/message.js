@@ -1,14 +1,12 @@
 const mongoose = require('mongoose');
 
 const keyboardSchema = mongoose.Schema({
-    userId: String, //populate this
-    switches: String,
-    size: String,
-    layout: String,
-    custom: Boolean,
-    sold: Boolean,
-    condition: String,
-    imgUrl: String
+    senderId: String, //populate
+    receiverId: String, //populate
+    timeSent: Date,
+    timeRead: Date,
+    read: Boolean,
+    message: String
 });
 
 // create the model for users and expose it to our app
