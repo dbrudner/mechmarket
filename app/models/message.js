@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const keyboardSchema = mongoose.Schema({
+const messageSchema = mongoose.Schema({
     senderId: String, //populate
     receiverId: String, //populate
     timeSent: Date,
@@ -10,4 +10,4 @@ const keyboardSchema = mongoose.Schema({
 });
 
 // create the model for users and expose it to our app
-module.exports = mongoose.model('Keyboard', keyboardSchema);
+module.exports = mongoose.model('Message', messageSchema);
