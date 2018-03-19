@@ -6,12 +6,17 @@ const bodyParser = require('body-parser')
 
 const {postKeyboard, getKeyboards} = require ('./route-functions/keyboard')
 
-getKeyboards()
-
 module.exports = function(app, passport) {
 
+    // Post a new keyboard
     app.post('/new/keyboard', (req, res) => {
+        postKeyboard()
+    })
 
+    // Get all keyboards
+    app.get('/api/keyboards/all', (req, res) => {
+        getKeyboards()
+        res.json('hey')
     })
 
     // Check if a user is logged in

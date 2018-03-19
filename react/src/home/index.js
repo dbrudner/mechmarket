@@ -23,6 +23,11 @@ export default class Home extends Component {
                 this.setState({username, loggedIn: true})
             }
         })
+
+        axios.get('/api/keyboards/all')
+        .then(res => {
+            console.log(res)
+        })
     }
 
     render() {
