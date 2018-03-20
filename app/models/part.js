@@ -5,6 +5,7 @@ const partSchema = mongoose.Schema({
     type: String,
     part: String,
     condition: String,
+    quantity: Number,
     imgUrl: String
 });
 

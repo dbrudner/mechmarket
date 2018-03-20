@@ -28,7 +28,7 @@ if (process.env.MONGODB_URI) {
 
 app.use(express.static(path.join(__dirname, 'react/build')));
 
-require('./config/passport')(passport); 
+require('./config/passport')(passport);
 
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
@@ -39,8 +39,9 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 // routes ======================================================================h
-routes.routes(app, passport); // load our routes and pass in our app and fully configured passport
-routes.keyboardRoutes(app)
+routes.userRoutes(app, passport); // load our routes and pass in our app and fully configured passport
+routes.keyboardRoutes(app);
+routes.reactRoutes(app);
 // launch ======================================================================
 app.listen(port);
 console.log('App listening on port ' + port);

@@ -1,7 +1,9 @@
-const routes = require('./routes')
+const userRoutes = require('./user-routes')
 const keyboardRoutes = require('./keyboard-routes')
+const reactRoutes = require('./react-routes')
 
 module.exports = {
-    routes,
-    keyboardRoutes
+    userRoutes,
+    keyboardRoutes,
+    reactRoutes
 }
