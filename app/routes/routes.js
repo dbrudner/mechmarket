@@ -1,9 +1,7 @@
 // app/routes.js
 const path = require('path')
-const db = require('./models/index');
+const db = require('../models/index');
 const bodyParser = require('body-parser')
-
-const {postKeyboard, getKeyboards} = require ('./route-functions/keyboard')
 
 module.exports = function(app, passport) {
 
@@ -14,9 +12,12 @@ module.exports = function(app, passport) {
 
     // Get all keyboards
     app.get('/api/keyboards/all', (req, res) => {
-        const keyboards = getKeyboards()
-        console.log('keys', keyboards)
-        res.json(keyboards)
+        db.Keyboard.find({})
+        .exec((err, result) => {
+            console.log('res', result)
+            res.json(result)            
+            if (err) throw err;
+        }) 
     })
 
     // Check if a user is logged in
@@ -37,9 +38,9 @@ module.exports = function(app, passport) {
     app.post('/login', passport.authenticate('local-login', {}));
 
     // Serves react stuff.
-    // app.get('*', (req, res) => {
-    //     res.sendFile(path.join(__dirname+'/react/public/index.html'))
-    // });
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname+'/react/public/index.html'))
+    });
 };
 
 

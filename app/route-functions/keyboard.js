@@ -13,7 +13,7 @@ module.exports = {
 
     // Working
     getKeyboards() {
-        return db.Keyboard.find({})
+        db.Keyboard.find({})
         .exec((err, result) => {
             console.log('res', result)
             if (err) throw err;
