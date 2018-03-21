@@ -1,12 +1,19 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 
+import LoginOrRegister from './login-or-register'
+import UserInfo from './user-info'
+
 class Navbar extends Component {
 
     constructor(props) {
         super(props)
 
-        this.state ={}
+        this.state ={
+            loggedIn: false,
+            username: '',
+            password: ''
+        }
     }
 
     render() {
@@ -43,7 +50,7 @@ class Navbar extends Component {
             }
         `
 
-        const UserInfo = styled.div`
+        const UserContainer = styled.div`
 
             display: inline-block;
 
@@ -69,12 +76,9 @@ class Navbar extends Component {
                         <li>Post new item</li>
                     </ul>
                 </NavLinks>
-                <UserInfo>
-                    <ul>
-                        <li>Sign in</li>
-                        <li>Log in</li>
-                    </ul>
-                </UserInfo>
+                <UserContainer>
+                    {this.state.loggedIn ? <UserInfo/> : <LoginOrRegister/>}
+                </UserContainer>
             </Navbar>
         )
     }
