@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export function Login(userInfo) {
     return {
         type: 'LOGIN',
@@ -13,8 +15,10 @@ export function logout() {
 }
 
 export function getKeyboards(keyboards) {
+    const request = axios.get('/api/keyboards/all')
+    
     return {
         type: 'GET_KEYBOARDS',
-        payload: keyboards
+        payload: request
     }
 }
