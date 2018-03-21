@@ -1,8 +1,12 @@
-export default function(state = [], action) {
+import _ from 'lodash'
+
+export default function(state = {}, action) {
     switch (action.type) {
         case 'GET_KEYBOARDS':
-            console.log('reducer', action)        
-            return action.payload;
+            const keyboards = _.mapKeys(action.payload.data,'_id')
+            console.log(keyboards)
+            return keyboards;
+        default:
+            return state
     }
-    return state
 }
