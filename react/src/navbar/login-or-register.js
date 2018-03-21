@@ -1,5 +1,6 @@
 import React,{Component} from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 
 export default class LoginOrRegister extends Component {
     constructor(props) {
@@ -14,6 +15,22 @@ export default class LoginOrRegister extends Component {
     handleChange = (name, value) => {
         this.setState({[name]: value}, () => {
             console.log(this.state)
+        })
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        const email = this.state.username.trim()
+        const password = this.state.password.trim()
+
+        axios.post('/login', {
+            email, password
+        })
+        .then(res => {
+            window.location.href = '/'
+        })
+        .catch(err => {
+            window.location.href = '/'            
         })
     }
 
