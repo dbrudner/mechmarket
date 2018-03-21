@@ -5,16 +5,18 @@ import {
     Route
 } from 'react-router-dom'
 
-import Container from './containers/container'
 import Navbar from './navbar'
+import Logout from './logout'
 
 class App extends Component {
     render() {
 		return (
-            <div>
-                <Navbar/>
-                <Container/>
-            </div>
+            <Router>
+                <div>
+                    <Navbar/>
+                    <Route exact path='/logout' component={Logout} />
+                </div>
+            </Router>
 		);
     }
 }
