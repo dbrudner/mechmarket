@@ -7,6 +7,7 @@ import {
 
 import Navbar from './navbar'
 import Logout from './logout'
+import PostKeyboard from './post-keyboard'
 
 class App extends Component {
     render() {
@@ -15,6 +16,7 @@ class App extends Component {
                 <div>
                     <Navbar/>
                     <Route exact path='/logout' component={Logout} />
+                    <Route exact path='/' component={PostKeyboard} />                    
                 </div>
             </Router>
 		);

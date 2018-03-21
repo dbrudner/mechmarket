@@ -69,7 +69,7 @@ class Navbar extends Component {
                 if (res.data) {
                     console.log('logged in')
                     this.props.Login({...res.data.local})
-                } else console.log('fail')
+                } else console.log('not logged in')
 
                 this.setState({loginCheck: true})
             })
@@ -87,7 +87,6 @@ class Navbar extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <NavbarContainer>
                 <Brand>
