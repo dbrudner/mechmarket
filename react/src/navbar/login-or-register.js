@@ -11,7 +11,8 @@ class LoginOrRegister extends Component {
 
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            redirect: false
         }
     }
       
@@ -21,19 +22,24 @@ class LoginOrRegister extends Component {
 
     handleSubmit = event => {
         event.preventDefault();        
-        this.props.Login()
-        // const email = this.state.username.trim()
-        // const password = this.state.password.trim()
+        const email = this.state.username.trim()
+        const password = this.state.password.trim()
 
-        // axios.post('/login', {
-        //     email, password
-        // })
-        // .then(res => {
-        //     window.location.href = '/'
-        // })
-        // .catch(err => {
-        //     window.location.href = '/'            
-        // })
+        axios.post('/login', {
+            email, password
+        })
+        .then(res => {
+            
+        })
+        .catch(err => {
+            axios.get('/test')
+            .then(res => {
+                if (res.data) {
+                    console.log('logged in')
+                    this.props.Login()
+                } else console.log('fail')
+            })      
+        })
     }
 
     render() {
