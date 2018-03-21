@@ -1,9 +1,20 @@
 import React from 'react'
+import styled from 'styled-components'
 
-export default function UserInfo() {
+const UserInfoContainer = styled.div`
+    ul li {
+        margin-right: 1rem;
+    }
+`
+
+export default function UserInfo(props) {
+    console.log(props)
     return (
-        <div>
-            UserInfo
-        </div>
+        <UserInfoContainer>
+            <ul>
+                <li>{props.userInfo.username}</li>
+                <li>logout</li>
+            </ul>
+        </UserInfoContainer>
     )
 }

@@ -80,7 +80,7 @@ class Navbar extends Component {
         if (!this.state.loginCheck) return null
 
         if (this.props.state.userInfo) {
-            return  <UserInfo/>
+            return  <UserInfo userInfo={{...this.props.state.userInfo}}/>
         } else {
             return <LoginOrRegister/>
         }
