@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import {connect} from 'react-redux'
-
+import {bindActionCreators} from 'redux'
+import { Login } from '../actions/index';
 import LoginOrRegister from './login-or-register'
 import UserInfo from './user-info'
 
@@ -24,7 +25,7 @@ const NavLinks = styled.div`
 
     ul {
         display: inline-block;
-        margin: 0; 
+        margin: 0;
         padding: 0;
 
         li {
@@ -42,11 +43,11 @@ const UserContainer = styled.div`
     display: inline-block;
 
     ul {
-        margin: 0; 
+        margin: 0;
         padding: 0;
 
         li {
-            display: inline-block;                    
+            display: inline-block;
         }
 }`
 
@@ -56,9 +57,32 @@ class Navbar extends Component {
         super(props)
 
         this.state ={
-            loggedIn: false,
             username: '',
-            password: ''
+            password: '',
+            loginCheck: null
+        }
+    }
+
+    componentDidMount() {
+        axios.get('/test')
+            .then(res => {
+                if (res.data) {
+                    console.log('logged in')
+                    this.props.Login({...res.data.local})
+                } else console.log('fail')
+
+                this.setState({loginCheck: true})
+            })
+    }
+
+    renderInfoOrLogin = () => {
+
+        if (!this.state.loginCheck) return null
+
+        if (this.props.state.userInfo) {
+            return  <UserInfo/>
+        } else {
+            return <LoginOrRegister/>
         }
     }
 
@@ -77,7 +101,7 @@ class Navbar extends Component {
                     </ul>
                 </NavLinks>
                 <UserContainer>
-                    {this.props.state.LoggedIn ? <UserInfo/> : <LoginOrRegister/>}
+                    {this.renderInfoOrLogin()}
                 </UserContainer>
             </NavbarContainer>
         )
@@ -90,4 +114,8 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(Navbar)
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({Login: Login}, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

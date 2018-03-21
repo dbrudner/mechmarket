@@ -12,8 +12,7 @@ class LoginOrRegister extends Component {
         this.state = {
             username: '',
             password: '',
-            redirect: false
-        }
+            redirect: false        }
     }
       
     handleChange = (name, value) => {

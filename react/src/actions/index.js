@@ -1,13 +1,6 @@
-export function Login(login) {
+export function Login(userInfo) {
     return {
         type: 'LOGIN',
-        payload: login
-    }
-}
-
-export function UserInfo(info) {
-    return {
-        type: 'USER_INFO',
-        payload: info
+        payload: userInfo
     }
 }
