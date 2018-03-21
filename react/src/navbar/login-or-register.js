@@ -1,8 +1,11 @@
 import React,{Component} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import { Login } from '../actions/index';
 
-export default class LoginOrRegister extends Component {
+class LoginOrRegister extends Component {
     constructor(props) {
         super(props)
 
@@ -13,29 +16,29 @@ export default class LoginOrRegister extends Component {
     }
       
     handleChange = (name, value) => {
-        this.setState({[name]: value}, () => {
-            console.log(this.state)
-        })
+        this.setState({[name]: value})
     }
 
     handleSubmit = event => {
-        event.preventDefault();
-        const email = this.state.username.trim()
-        const password = this.state.password.trim()
+        event.preventDefault();        
+        this.props.Login()
+        // const email = this.state.username.trim()
+        // const password = this.state.password.trim()
 
-        axios.post('/login', {
-            email, password
-        })
-        .then(res => {
-            window.location.href = '/'
-        })
-        .catch(err => {
-            window.location.href = '/'            
-        })
+        // axios.post('/login', {
+        //     email, password
+        // })
+        // .then(res => {
+        //     window.location.href = '/'
+        // })
+        // .catch(err => {
+        //     window.location.href = '/'            
+        // })
     }
 
     render() {
-
+        console.log(this.props)
+        console.log('hey')
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
@@ -48,3 +51,16 @@ export default class LoginOrRegister extends Component {
           
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        state
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({Login: Login}, dispatch)
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginOrRegister)
