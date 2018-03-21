@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
+
+import SubmitButton from './submit-button'
 
 const PostContainer = styled.div`
     margin-left: 40%;
@@ -45,7 +48,20 @@ class Post extends Component {
 
     renderAllInputs = () => {
         return Object.keys(this.state.keyboard).map(item => {
-            return this.renderInput(item)
+            return <div key={item}>{this.renderInput(item)}</div>
+        })
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        const keyboard = this.state.keyboard
+
+        axios.post('/api/new/keyboard', keyboard)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.log(err)
         })
     }
 
@@ -53,8 +69,11 @@ class Post extends Component {
         console.log(this.state.keyboard)
         return (
             <PostContainer>
-                <form>
+                <form onSubmit={this.handleSubmit}>
                     {this.renderAllInputs()}
+                    <SubmitButton>
+                        Submit
+                    </SubmitButton>
                 </form>         
             </PostContainer>
         )

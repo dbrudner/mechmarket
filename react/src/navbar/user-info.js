@@ -10,7 +10,6 @@ const UserInfoContainer = styled.div`
 `
 
 export default function UserInfo(props) {
-    console.log(props)
     return (
         <UserInfoContainer>
             <ul>

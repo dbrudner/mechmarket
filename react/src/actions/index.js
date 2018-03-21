@@ -11,3 +11,10 @@ export function logout() {
         payload: null
     }
 }
+
+export function getKeyboards(keyboards) {
+    return {
+        type: 'GET_KEYBOARDS',
+        payload: keyboards
+    }
+}

@@ -8,7 +8,15 @@ const keyboardSchema = mongoose.Schema({
     custom: Boolean,
     sold: Boolean,
     condition: String,
-    imgUrl: String
+    imgUrl: String,
+    plate: String,
+    forSale: Boolean,
+    upvotes: {
+        type: Number,
+        default: 0,
+        required: true
+    },
+    created_at: { type: Date, required: true, default: Date.now }
 });
 
 // create the model for users and expose it to our app

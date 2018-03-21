@@ -8,6 +8,8 @@ import {
 import Navbar from './navbar'
 import Logout from './logout'
 import PostKeyboard from './post-keyboard'
+import SearchKeyboard from './search-keyboard'
+import Home from './home'
 
 class App extends Component {
     render() {
@@ -15,8 +17,10 @@ class App extends Component {
             <Router>
                 <div>
                     <Navbar/>
+                    <Route exact path='/' component={Home} />
                     <Route exact path='/logout' component={Logout} />
-                    <Route exact path='/' component={PostKeyboard} />                    
+                    <Route exact path='/new/keyboard' component={PostKeyboard} />     
+                    <Route exact path='/keyboard/:param' component={SearchKeyboard} /> 
                 </div>
             </Router>
 		);
