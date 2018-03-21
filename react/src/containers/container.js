@@ -8,8 +8,6 @@ class Container extends Component {
     }
 
     render() {
-        console.log('hey')
-        console.log(this.props.books)
         return <div> Container </div>
     }
 }

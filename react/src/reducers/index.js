@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import Books from './books'
-import LoggedIn from './loggedIn'
+import Login from './login'
 
 const rootReducer = combineReducers({
   books: Books,
-  LoggedIn
+  userInfo: Login
 });
 
 export default rootReducer;

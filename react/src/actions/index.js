@@ -1,7 +1,13 @@
 export function Login(login) {
-    console.log('hey?')
     return {
         type: 'LOGIN',
         payload: login
+    }
+}
+
+export function UserInfo(info) {
+    return {
+        type: 'USER_INFO',
+        payload: info
     }
 }

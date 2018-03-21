@@ -36,15 +36,13 @@ class LoginOrRegister extends Component {
             .then(res => {
                 if (res.data) {
                     console.log('logged in')
-                    this.props.Login()
+                    this.props.Login({...res.data.local})
                 } else console.log('fail')
             })      
         })
     }
 
     render() {
-        console.log(this.props)
-        console.log('hey')
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
