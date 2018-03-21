@@ -4,6 +4,8 @@ import axios from 'axios'
 
 import SubmitButton from './submit-button'
 
+import {connect} from 'react-redux'
+
 const PostContainer = styled.div`
     margin-left: 40%;
     font-size: 2rem;
@@ -54,7 +56,7 @@ class Post extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        const keyboard = this.state.keyboard
+        let keyboard = this.state.keyboard
 
         axios.post('/api/new/keyboard', keyboard)
         .then(res => {
@@ -66,7 +68,8 @@ class Post extends Component {
     }
 
     render() {
-        console.log(this.state.keyboard)
+        console.log(this.props)
+        
         return (
             <PostContainer>
                 <form onSubmit={this.handleSubmit}>
@@ -80,4 +83,9 @@ class Post extends Component {
     }
 }
 
-export default Post
+function mapStateToProps(state) {
+    return {
+        userInfo: state.userInfo
+    }
+}
+export default connect(mapStateToProps)(Post)

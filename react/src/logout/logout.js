@@ -31,7 +31,7 @@ class Logout extends React.Component {
     }
     
     render() {
-        return <Redirect to={{ pathname: '/blah' }} />
+        return <Redirect to={{ pathname: '/' }} />
     }  
 }
 

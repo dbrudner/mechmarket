@@ -5,11 +5,11 @@ import {
     Route
 } from 'react-router-dom'
 
-import Navbar from './navbar'
-import Logout from './logout'
-import PostKeyboard from './post-keyboard'
-import SearchKeyboard from './search-keyboard'
-import Home from './home'
+import Navbar from './navbar/navbar'
+import Logout from './logout/logout'
+import PostKeyboard from './post-keyboard/post-keyboard'
+import SearchKeyboard from './search-keyboard/search-keyboard'
+import Home from './home/home'
 
 class App extends Component {
     render() {
