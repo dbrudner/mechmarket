@@ -4,6 +4,17 @@ import axios from 'axios'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import { Login } from '../actions/index';
+import {Link} from 'react-router-dom'
+
+import SignupButton from './signup-button'
+
+const SignupButtonContainer = styled.div`
+    display: inline-block;
+`
+
+const Form = styled.form`
+    display: inline-block;
+`
 
 class LoginOrRegister extends Component {
     constructor(props) {
@@ -12,15 +23,17 @@ class LoginOrRegister extends Component {
         this.state = {
             username: '',
             password: '',
-            redirect: false        }
+            redirect: false,
+            loginFail: false
+        }
     }
-      
+
     handleChange = (name, value) => {
         this.setState({[name]: value})
     }
 
     handleSubmit = event => {
-        event.preventDefault();        
+        event.preventDefault();
         const email = this.state.username.trim()
         const password = this.state.password.trim()
 
@@ -28,30 +41,37 @@ class LoginOrRegister extends Component {
             email, password
         })
         .then(res => {
-            
+
         })
         .catch(err => {
             axios.get('/test')
             .then(res => {
                 if (res.data) {
                     console.log('logged in')
+                    this.setState({loginFail: false})
                     this.props.Login({...res.data.local})
-                } else console.log('fail')
-            })      
+                } else {
+                    this.setState({loginFail: true})
+                }
+            })
         })
     }
 
     render() {
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit}>
+                    {this.state.loginFail ? <span>Wrong username or password</span> : null}
                     <input value={this.state.username} type='text' onChange={event => {this.handleChange('username', event.target.value)}}/>
                     <input value={this.state.password} type='password' onChange={event => {this.handleChange('password', event.target.value)}}/>
-                    <button type='submit'>Button</button>
-                </form>
+                    <button type='submit'>Login</button>
+                </Form>
+                <SignupButtonContainer>
+                    <SignupButton/>
+                </SignupButtonContainer>
             </div>
         )
-          
+
     }
 }
 
