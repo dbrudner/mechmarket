@@ -30,12 +30,12 @@ class App extends Component {
     }
 
     render() {
-        console.log(this.props)                
 		return (
             <Router>
                 <div>
                     <Navbar/>
                     {this.props.state.openSignUp ? <Signup closeModal={this.closeModal}/> : null}
+                    
                     <Route exact path='/' component={Home} />
                     <Route exact path='/new/keyboard' component={PostKeyboard} />     
                     <Route exact path='/keyboard/:param' component={SearchKeyboard} /> 

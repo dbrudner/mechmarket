@@ -29,3 +29,10 @@ export function openSignUp(boolean) {
         payload: boolean
     }
 }
+
+export function postKeyboard(boolean) {
+    return {
+        type: 'POST_KEYBOARD',
+        payload: boolean
+    }
+}

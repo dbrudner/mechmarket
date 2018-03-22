@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import { Login, logout } from '../actions/index';
+import { Login, logout, postKeyboard } from '../actions/index';
 import LoginOrRegister from './login-or-register'
 import UserInfo from './user-info'
 
@@ -88,6 +88,11 @@ class Navbar extends Component {
         }
     }
 
+    postKeyboard = () => {
+        this.props.postKeyboard(true)
+        console.log(this.props.state.postKeyboard)
+    }
+
     render() {
         return (
             <NavbarContainer>
@@ -98,7 +103,7 @@ class Navbar extends Component {
                     <ul>
                         <li>Keyboards</li>
                         <li>Parts</li>
-                        <li>Post new item</li>
+                        <li onClick={this.postKeyboard}>Post new keyboard</li>
                     </ul>
                 </NavLinks>
                 <UserContainer>
@@ -116,7 +121,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({Login: Login, logout: logout}, dispatch)
+    return bindActionCreators({Login, logout, postKeyboard}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar)
