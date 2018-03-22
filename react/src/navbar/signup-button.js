@@ -6,13 +6,10 @@ const Button = styled.button`
     display: inline-block;
 `
 
-export default function SignupButton() {
-
+export default function SignupButton(props) {
     return (
-        <Button>
-            <Link to='/signup'>
+        <Button onClick={props.signUp}>
                 Signup
-            </Link>
         </Button>
     )
 }

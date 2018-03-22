@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import { Login } from '../actions/index';
+import { Login, openSignUp } from '../actions/index';
 import {Link} from 'react-router-dom'
 
 import SignupButton from './signup-button'
@@ -58,7 +58,12 @@ class LoginOrRegister extends Component {
         })
     }
 
+    signUp = () => {
+        this.props.openSignUp(true)
+    }
+
     render() {
+        
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
@@ -68,11 +73,10 @@ class LoginOrRegister extends Component {
                     <button type='submit'>Login</button>
                 </Form>
                 <SignupButtonContainer>
-                    <SignupButton/>
+                    <button onClick={this.signUp}> Sign up </button>
                 </SignupButtonContainer>
             </div>
         )
-
     }
 }
 
@@ -83,7 +87,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({Login: Login}, dispatch)
+    return bindActionCreators({Login: Login, openSignUp: openSignUp}, dispatch)
 }
 
 

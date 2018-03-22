@@ -7,7 +7,6 @@ import { Login } from '../actions/index';
 import LoginOrRegister from './login-or-register'
 import UserInfo from './user-info'
 
-
 const NavbarContainer = styled.div`
     background-color: rgb(80%, 53.4%, 53.4%);
     width: 100%;
@@ -36,7 +35,7 @@ const NavLinks = styled.div`
                 margin-left: 0;
             }
         }
-}
+    }
 `
 
 const UserContainer = styled.div`

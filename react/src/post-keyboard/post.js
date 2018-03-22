@@ -58,9 +58,9 @@ class Post extends Component {
         event.preventDefault();
 
         // Keyboard object with all state input values and userid
-        console.log(this.props.userInfo)
+        
         const keyboard = {...this.state.keyboard, userId: this.props.userInfo._id}
-        console.log(keyboard)
+        
         axios.post('/api/new/keyboard', keyboard)
         .then(res => {
             console.log(res)

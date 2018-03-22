@@ -17,21 +17,24 @@ class Logout extends React.Component {
     }
 
     componentWillMount() {
-
+        // sets app state to logged out. Outside of axios because it doesn't fire inside request. I think component redirects before state is changed when I do that, but not sure.
+        this.props.logout()
         // Sends request to logout, if logout is succesful, redirects to index.
         axios.get('/logout')
             .then(response => {
+                
                 this.setState({
                     fireRedirect: true
                 })
             }).catch(err => {
+                this.props.logout()
                 console.log(err)
             })
     }
-    
+
     render() {
         return <Redirect to={{ pathname: '/' }} />
-    }  
+    }
 }
 
 // Probably don't need this?

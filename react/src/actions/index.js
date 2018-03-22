@@ -8,6 +8,7 @@ export function Login(userInfo) {
 }
 
 export function logout() {
+    console.log('logging out?')
     return {
         type: 'LOGOUT',
         payload: null
@@ -20,5 +21,12 @@ export function getKeyboards(keyboards) {
     return {
         type: 'GET_KEYBOARDS',
         payload: request
+    }
+}
+
+export function openSignUp(boolean) {
+    return {
+        type: 'SIGNUP',
+        payload: boolean
     }
 }

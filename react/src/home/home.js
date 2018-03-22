@@ -12,7 +12,7 @@ class Home extends Component {
     }
 
     render() {
-        console.log(this.props.state.keyboards)
+        console.log(this.props)
         return (
             <div>
                 Home
