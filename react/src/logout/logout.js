@@ -11,9 +11,6 @@ class Logout extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = {
-            fireRedirect: null
-        }
     }
 
     componentDidMount() {
@@ -21,12 +18,7 @@ class Logout extends React.Component {
         // Sends request to logout, if logout is succesful, redirects to index and sets app state to logged out.
         axios.get('/logout')
             .then(response => {
-
                 this.props.logout()
-
-                // this.setState({
-                //     fireRedirect: true
-                // })
             })
     }
 
