@@ -56,8 +56,11 @@ class Post extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        let keyboard = this.state.keyboard
 
+        // Keyboard object with all state input values and userid
+        console.log(this.props.userInfo)
+        const keyboard = {...this.state.keyboard, userId: this.props.userInfo._id}
+        console.log(keyboard)
         axios.post('/api/new/keyboard', keyboard)
         .then(res => {
             console.log(res)

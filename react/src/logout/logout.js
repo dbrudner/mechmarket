@@ -18,8 +18,7 @@ class Logout extends React.Component {
 
     componentWillMount() {
 
-        console.log(this.props.logout())
-        console.log(this.props.state.userInfo)
+        // Sends request to logout, if logout is succesful, redirects to index.
         axios.get('/logout')
             .then(response => {
                 this.setState({
@@ -35,13 +34,14 @@ class Logout extends React.Component {
     }  
 }
 
-
+// Probably don't need this?
 function mapStateToProps(state) {
     return {
         state
     }
 }
 
+// Lets app state know user is logged out
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({logout: logout}, dispatch)
 }

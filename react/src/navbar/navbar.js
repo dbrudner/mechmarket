@@ -64,11 +64,14 @@ class Navbar extends Component {
     }
 
     componentDidMount() {
+
+        // I make this request because if a user navigates away from the site or reloads, app state is lost, but session is still in storage.
+        // This makes it so a user doesn't have to re login after leaving or reloading site.
+        // ****On navbar, so this request happens on everytime this component mounts. I don't know if this is good or bad. Sounds like overkill? 
         axios.get('/test')
             .then(res => {
                 if (res.data) {
-                    console.log('logged in')
-                    this.props.Login({...res.data.local})
+                    this.props.Login({...res.data.local, _id: res.data._id})
                 } else console.log('not logged in')
 
                 this.setState({loginCheck: true})

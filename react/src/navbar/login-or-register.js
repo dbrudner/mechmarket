@@ -50,11 +50,9 @@ class LoginOrRegister extends Component {
                     console.log('logged in')
                     this.setState({loginFail: false})
                     this.props.Login({...res.data.local, _id: res.data._id})
-                    return res.data
                     
                 } else {
                     this.setState({loginFail: true})
-                    return null
                 }
             })
         })
