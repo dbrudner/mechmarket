@@ -6,8 +6,7 @@ import {
 } from 'react-router-dom'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-
-import { openSignUp } from './actions/index';
+import { openSignUp, getKeyboards } from './actions/index';
 
 import Navbar from './navbar/navbar'
 import Logout from './logout/logout'
@@ -22,12 +21,17 @@ class App extends Component {
         super(props)
     }
 
+    componentDidMount() {
+        this.props.keyboards()
+    }
+
     closeModal = () => {
         console.log('close modal')
         this.props.openSignUp(false)
     }
 
     render() {
+        console.log(this.props)                
 		return (
             <Router>
                 <div>
@@ -50,7 +54,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({openSignUp: openSignUp}, dispatch)
+    return bindActionCreators({openSignUp: openSignUp, keyboards: getKeyboards}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
