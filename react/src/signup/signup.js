@@ -3,8 +3,9 @@ import Modal from 'react-responsive-modal'
 
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-
 import { openSignUp } from '../actions/index';
+
+import Form from './form'
 
 class Signup extends Component {
     constructor(props) {
@@ -33,12 +34,7 @@ class Signup extends Component {
         return (
             <div>
                 <Modal open={open} onClose={this.onCloseModal} little>
-                    <h2>Simple centered modal</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                        pulvinar risus non risus hendrerit venenatis. Pellentesque sit amet
-                        hendrerit risus, sed porttitor quam.
-                    </p>
+                    <Form/>
                 </Modal>
             </div>
         );
