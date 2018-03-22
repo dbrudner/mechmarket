@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
-const partSchema = mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const partSchema = new Schema({
     userId: String, //populate this
     type: String,
     part: String,

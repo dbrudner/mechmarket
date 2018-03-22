@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
-const messageSchema = mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const messageSchema = new Schema({
     senderId: String, //populate
     receiverId: String, //populate
     timeSent: Date,

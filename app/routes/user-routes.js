@@ -12,7 +12,8 @@ module.exports = function(app, passport) {
 
     // Get all keyboards
     app.get('/api/keyboards/all', (req, res) => {
-        db.Keyboard.find({})
+        db.Keyboard.find()
+        .populate('userId')
         .exec((err, result) => {
             console.log('res', result)
             res.json(result)            
@@ -27,8 +28,8 @@ module.exports = function(app, passport) {
 
     // Logout
     app.get('/logout', (req, res) => {
-        req.session.destroy();
         req.logout();
+        res.json('logged out')
       });
 
     // Signup

@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 
-const keyboardSchema = mongoose.Schema({
-    userId: String, //populate this
+const Schema = mongoose.Schema;
+
+const keyboardSchema = new Schema({
+    userId: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User'
+    },
     switches: String,
     size: String,
     layout: String,
