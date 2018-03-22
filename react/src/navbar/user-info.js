@@ -14,7 +14,7 @@ export default function UserInfo(props) {
         <UserInfoContainer>
             <ul>
                 <li>{props.userInfo.username}</li>
-                <li><Link to="/logout">Logout</Link></li>
+                <li onClick={props.logout}>Logout</li>
             </ul>
         </UserInfoContainer>
     )

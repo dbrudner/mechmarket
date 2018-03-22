@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import { Login } from '../actions/index';
+import { Login, logout } from '../actions/index';
 import LoginOrRegister from './login-or-register'
 import UserInfo from './user-info'
 
@@ -82,7 +82,7 @@ class Navbar extends Component {
         if (!this.state.loginCheck) return null
 
         if (this.props.state.userInfo) {
-            return  <UserInfo userInfo={{...this.props.state.userInfo}}/>
+            return  <UserInfo logout={this.props.logout} userInfo={{...this.props.state.userInfo}}/>
         } else {
             return <LoginOrRegister/>
         }
@@ -116,7 +116,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({Login: Login}, dispatch)
+    return bindActionCreators({Login: Login, logout: logout}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

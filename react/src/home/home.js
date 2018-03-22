@@ -3,13 +3,8 @@ import axios from 'axios'
 
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import {getKeyboards} from '../actions/index'
 
-class Home extends Component {
-
-    componentDidMount() {
-        this.props.keyboards()
-    }
+export default class Home extends Component {
 
     render() {
         return (
@@ -26,9 +21,6 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({keyboards: getKeyboards}, dispatch)
-}
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+// export default connect(mapStateToProps, mapDispatchToProps)(Home)

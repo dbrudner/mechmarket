@@ -29,8 +29,9 @@ module.exports = function(app, passport) {
     // Logout
     app.get('/logout', (req, res) => {
         req.logout();
-        res.json('logged out')
-      });
+        console.log('logging out')
+        res.json('logged out');
+    });
 
     // Signup
     app.post('/signup', passport.authenticate('local-signup', {}));

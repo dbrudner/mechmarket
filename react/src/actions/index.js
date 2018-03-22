@@ -17,7 +17,6 @@ export function logout() {
 
 export function getKeyboards(keyboards) {
     const request = axios.get('/api/keyboards/all')
-    console.log('getting keys')
     return {
         type: 'GET_KEYBOARDS',
         payload: request

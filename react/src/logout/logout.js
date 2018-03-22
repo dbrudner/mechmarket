@@ -18,7 +18,11 @@ class Logout extends React.Component {
         // Sends request to logout, if logout is succesful, redirects to index and sets app state to logged out.
         axios.get('/logout')
             .then(response => {
+                console.log(response)
                 this.props.logout()
+            })
+            .catch(err => {
+                console.log(err)
             })
     }
 
