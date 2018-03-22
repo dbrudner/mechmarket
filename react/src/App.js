@@ -9,7 +9,7 @@ import {bindActionCreators} from 'redux'
 import { openSignUp, getKeyboards } from './actions/index';
 
 import Navbar from './navbar/navbar'
-import PostKeyboard from './post-keyboard/post-keyboard'
+import PostKeyboardModal from './post-keyboard/post-keyboard-modal'
 import SearchKeyboard from './search-keyboard/search-keyboard'
 import Home from './home/home'
 import Signup from './signup/signup'
@@ -21,23 +21,27 @@ class App extends Component {
     }
 
     componentDidMount() {
+        // Gets all keyboards from database and stores them in app state
         this.props.keyboards()
     }
 
-    closeModal = () => {
-        console.log('close modal')
+    closeSignupModal = () => {
+        // Sets opensignup false in app state, closing the sign up modal
         this.props.openSignUp(false)
     }
 
     render() {
+        console.log(this.props.state)
 		return (
             <Router>
                 <div>
                     <Navbar/>
-                    {this.props.state.openSignUp ? <Signup closeModal={this.closeModal}/> : null}
+                    {/* When signup is true in app state, shows sign up modal */}
+
+                    {this.props.state.openSignUp ? <Signup closeModal={this.closeSignupModal}/> : null}
+                    {this.props.state.postKeyboard ? <PostKeyboardModal closeModal={this.closeSignupModal}/> : null}                    
                     
                     <Route exact path='/' component={Home} />
-                    <Route exact path='/new/keyboard' component={PostKeyboard} />     
                     <Route exact path='/keyboard/:param' component={SearchKeyboard} /> 
                 </div>
             </Router>

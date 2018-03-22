@@ -90,7 +90,6 @@ class Navbar extends Component {
 
     postKeyboard = () => {
         this.props.postKeyboard(true)
-        console.log(this.props.state.postKeyboard)
     }
 
     render() {
