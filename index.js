@@ -14,7 +14,7 @@ const dbname = 'testdb'
 
 const developmentUrl = `mongodb://localhost/${dbname}`
 
-const routes = require('./app/routes/allRoutes')
+const routes = require('./app/routes')
 
 if (process.env.MONGODB_URI) {
     mongoose.connect(process.env.MONGODB_URI)
