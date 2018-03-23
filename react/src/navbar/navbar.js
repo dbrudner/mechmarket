@@ -77,12 +77,20 @@ class Navbar extends Component {
             })
     }
 
+    logout = () => {
+        axios.get('/logout')
+        .then(res => {
+            console.log(res)
+            this.props.logout();            
+        })
+    }
+
     renderInfoOrLogin = () => {
 
         if (!this.state.loginCheck) return null
 
         if (this.props.state.userInfo) {
-            return  <UserInfo logout={this.props.logout} userInfo={{...this.props.state.userInfo}}/>
+            return  <UserInfo logout={this.logout} userInfo={{...this.props.state.userInfo}}/>
         } else {
             return <LoginOrRegister/>
         }
