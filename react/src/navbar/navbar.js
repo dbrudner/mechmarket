@@ -73,7 +73,6 @@ class Navbar extends Component {
                 if (res.data) {
                     this.props.Login({...res.data, _id: res.data._id})
                 } else console.log('not logged in')
-
                 this.setState({loginCheck: true})
             })
     }

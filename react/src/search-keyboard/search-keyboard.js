@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-
+import {connect} from 'react-redux'
 
 class SearchKeyboard extends Component {
     constructor(props) {
@@ -11,6 +11,7 @@ class SearchKeyboard extends Component {
     }
 
     render() {
+        console.log(this.props)
         return (
             <div>
                 keyboards
@@ -19,4 +20,10 @@ class SearchKeyboard extends Component {
     }
 }
 
-export default SearchKeyboard
+function mapStateToProps(state) {
+    return {
+        state
+    }
+}
+
+export default connect(mapStateToProps)(SearchKeyboard)

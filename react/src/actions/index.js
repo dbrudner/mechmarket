@@ -9,7 +9,6 @@ export function Login(userInfo) {
 }
 
 export function logout() {
-    console.log('logging out?')
     return {
         type: types.LOGOUT,
         payload: null

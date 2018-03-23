@@ -14,9 +14,7 @@ const dbname = 'testdb'
 
 const developmentUrl = `mongodb://localhost/${dbname}`
 
-const routes = require('./app/routes')
-
-console.log(routes.routes)
+const routes = require('./app/routes/allRoutes')
 
 if (process.env.MONGODB_URI) {
     mongoose.connect(process.env.MONGODB_URI)
@@ -38,12 +36,14 @@ app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secre
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-// routes ======================================================================h
-routes.userRoutes(app, passport); // load our routes and pass in our app and fully configured passport
-routes.keyboardRoutes(app);
-routes.reactRoutes(app);
+// routes ======================================================================
+// routes.userRoutes(app, passport);
+// routes.keyboardRoutes(app);
+// routes.reactRoutes(app);
+routes(app, passport)
+
+
+
 // launch ======================================================================
 app.listen(port);
 console.log('App listening on port ' + port);
-
-module.exports = app;

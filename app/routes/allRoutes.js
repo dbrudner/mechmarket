@@ -3,8 +3,30 @@ const path = require('path')
 const db = require('../models/index');
 const bodyParser = require('body-parser')
 
+const keyboardRoutes = require('./keyboard-routes')
 
-module.exports = function(app) {
+module.exports = function(app, passport) {
+
+    // Signup
+    app.post('/signup', passport.authenticate('local-signup'), (req, res) => {
+        res.json('signing up')
+    })
+    
+    // Login
+    app.post('/login', passport.authenticate('local-login'), ((req, res) => {
+        res.json('logging in')
+    }));
+
+    // Logout
+    app.get('/logout', (req, res) => {
+        req.logout();
+        res.json('logging out');
+    });
+
+    // Used to find if user is logged in
+    app.get('/test', function(req, res) {
+        res.json(req.user)
+    });
 
     // Post a new keyboard
     app.post('/api/new/keyboard', (req, res) => {
