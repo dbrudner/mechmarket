@@ -68,14 +68,15 @@ class Navbar extends Component {
         // This makes it so a user doesn't have to re login after leaving or reloading site.
         // ****On navbar, so this request happens on everytime this component mounts. I don't know if this is good or bad. Sounds like overkill?
         // Commented out because this request invokes an error in jest
-        // axios.get('/test')
-        //     .then(res => {
-        //         if (res.data) {
-        //             this.props.Login({...res.data.local, _id: res.data._id})
-        //         } else console.log('not logged in')
+        axios.get('/test')
+            .then(res => {
+                console.log('hey')                
+                if (res.data) {
+                    this.props.Login({...res.data.local, _id: res.data._id})
+                } else console.log('not logged in')
 
-        //         this.setState({loginCheck: true})
-        //     })
+                this.setState({loginCheck: true})
+            })
     }
 
     logout = () => {

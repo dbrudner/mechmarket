@@ -11,6 +11,17 @@ module.exports = function(app, passport) {
     // Login
     app.post('/login', passport.authenticate('local-login', {}));
 
+    // Logout
+    app.get('/logout', (req, res) => {
+        req.logout();
+        res.json('logging out');
+    })
+
+    // Used to find if user is logged in
+    app.get('/test', function(req, res) {
+        res.json(req.user)
+    })
+
     // Serves react stuff.
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname+'/react/public/index.html'))
