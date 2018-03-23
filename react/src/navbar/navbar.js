@@ -70,9 +70,8 @@ class Navbar extends Component {
         // Commented out because this request invokes an error in jest
         axios.get('/test')
             .then(res => {
-                console.log('hey')                
                 if (res.data) {
-                    this.props.Login({...res.data.local, _id: res.data._id})
+                    this.props.Login({...res.data, _id: res.data._id})
                 } else console.log('not logged in')
 
                 this.setState({loginCheck: true})

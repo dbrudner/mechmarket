@@ -48,18 +48,23 @@ class Form extends Component {
         })
     }
 
-    handleChange = (name, value) => {
-        console.log(name)
-        console.log(value)
-        this.setState({user: {...this.state.user, [name]: value}})
-    }
+    handleChange = (name, value) => {this.setState({user: {...this.state.user, [name]: value}})}
 
     handleSubmit = event => {
         event.preventDefault()
         const user = this.state.user
+        const {email, password} = user
         axios.post('/signup', user)
         .then(res => {
-            console.log(res)
+            console.log('sign up success')
+            axios.post('/login', {
+                email, password
+            })
+        }).catch (err => {
+            console.log('sign up fail')            
+            axios.post('/login', {
+                email, password
+            })
         })
     }
     
