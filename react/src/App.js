@@ -4,7 +4,6 @@ import Routing from './routing'
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import registerServiceWorker from './registerServiceWorker';
 import ReduxPromise from 'redux-promise'
 
 import reducers from './reducers';
