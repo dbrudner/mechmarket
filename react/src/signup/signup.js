@@ -26,7 +26,6 @@ class Signup extends Component {
         this.setState({ open: false }, () => {
             setTimeout(() => this.props.openSignUp(false), 300)            
         }); 
-
     };
 
     render() {
@@ -34,7 +33,7 @@ class Signup extends Component {
         return (
             <div>
                 <Modal open={open} onClose={this.onCloseModal} little>
-                    <Form/>
+                    <Form closeModal={this.onCloseModal}/>
                 </Modal>
             </div>
         );

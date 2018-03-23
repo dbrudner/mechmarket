@@ -2,6 +2,10 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import { Login, openSignUp } from '../actions/index';
+
 const FormContainer = styled.div``
 
 const Label = styled.span`
@@ -54,17 +58,18 @@ class Form extends Component {
         event.preventDefault()
         const user = this.state.user
         const {email, password} = user
+
         axios.post('/signup', user)
         .then(res => {
             console.log('sign up success')
-            axios.post('/login', {
-                email, password
+            axios.get('/test')
+            .then(res => {
+                this.props.Login(res.data)
+                this.props.closeModal()
             })
+            
         }).catch (err => {
-            console.log('sign up fail')            
-            axios.post('/login', {
-                email, password
-            })
+            throw err
         })
     }
     
@@ -81,4 +86,14 @@ class Form extends Component {
 }
 
 
-export default Form
+function mapStateToProps(state) {
+    return {
+        state
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({Login, openSignUp}, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form)
