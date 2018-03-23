@@ -1,8 +1,9 @@
 import axios from 'axios'
+import * as types from './types'
 
 export function Login(userInfo) {
     return {
-        type: 'LOGIN',
+        type: types.LOGIN,
         payload: userInfo
     }
 }
@@ -10,7 +11,7 @@ export function Login(userInfo) {
 export function logout() {
     console.log('logging out?')
     return {
-        type: 'LOGOUT',
+        type: types.LOGOUT,
         payload: null
     }
 }
@@ -18,21 +19,21 @@ export function logout() {
 export function getKeyboards(keyboards) {
     const request = axios.get('/api/keyboards/all')
     return {
-        type: 'GET_KEYBOARDS',
+        type: types.GET_KEYBOARDS,
         payload: request
     }
 }
 
 export function openSignUp(boolean) {
     return {
-        type: 'SIGNUP',
+        type: types.SIGNUP,
         payload: boolean
     }
 }
 
 export function postKeyboard(boolean) {
     return {
-        type: 'POST_KEYBOARD',
+        type: types.POST_KEYBOARD,
         payload: boolean
     }
 }
