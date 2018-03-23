@@ -8,13 +8,15 @@ import registerServiceWorker from './registerServiceWorker';
 import ReduxPromise from 'redux-promise'
 
 import reducers from './reducers';
-
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
 ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducers)}>
-        <App />
+        <MuiThemeProvider>
+            <App />
+        </MuiThemeProvider>
     </Provider>
     , document.getElementById('root'));
 registerServiceWorker();

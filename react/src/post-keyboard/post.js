@@ -1,14 +1,15 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import TextField from 'material-ui/TextField'
 
 import SubmitButton from './submit-button'
 
 import {connect} from 'react-redux'
 
 const PostContainer = styled.div`
-    margin-left: 40%;
     font-size: 2rem;
+    padding: 3rem 10rem;
 `
 
 const Label = styled.span`
@@ -76,7 +77,12 @@ class Post extends Component {
         return (
             <PostContainer>
                 <form onSubmit={this.handleSubmit}>
-                    {this.renderAllInputs()}
+                    {/* {this.renderAllInputs()} */}
+                    <TextField
+                        hintText="Hint Text"
+                        floatingLabelText="Fixed Floating Label Text"
+                        floatingLabelFixed={true}
+                        />
                     <SubmitButton>
                         Submit
                     </SubmitButton>
