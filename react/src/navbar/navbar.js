@@ -66,7 +66,7 @@ class Navbar extends Component {
 
         // I make this request because if a user navigates away from the site or reloads, app state is lost, but session is still in storage.
         // This makes it so a user doesn't have to re login after leaving or reloading site.
-        // ****On navbar, so this request happens on everytime this component mounts. I don't know if this is good or bad. Sounds like overkill? 
+        // ****On navbar, so this request happens on everytime this component mounts. I don't know if this is good or bad. Sounds like overkill?
         axios.get('/test')
             .then(res => {
                 if (res.data) {
@@ -81,7 +81,7 @@ class Navbar extends Component {
         axios.get('/logout')
         .then(res => {
             console.log(res)
-            this.props.logout();            
+            this.props.logout();
         })
     }
 
