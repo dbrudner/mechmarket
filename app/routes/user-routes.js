@@ -18,6 +18,7 @@ module.exports = {
     // Login
     login: function(app, passport, route) {
         app.post(route, passport.authenticate('local-login'), ((req, res) => {
+            console.log('oggging in')            
             res.json('logging in')
         }));
     },

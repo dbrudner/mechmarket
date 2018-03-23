@@ -44,43 +44,42 @@ module.exports = function(passport) {
         // asynchronous
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
+            // find a user whose email is the same as the forms email
+            // we are checking to see if the user trying to login already exists
+            User.findOne({ 'email' :  email }, function(err, user) {
+                // if there are any errors, return the error
+                if (err)
+                    return done(err);
 
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
-        User.findOne({ 'email' :  email }, function(err, user) {
-            // if there are any errors, return the error
-            if (err)
-                return done(err);
+                // check to see if theres already a user with that email
+                if (user) {
+                    return done(null, false, {message: 'Email already exists'});
+                } else {
+                    // if there is no user with that email
+                    // check is theres a user with username
+                    User.findOne({'username': req.body.username}, function(err, user) {
+                        if (user) {
+                            return done(null, false, {message: 'Username already exists'})
+                        } else {
+                            // create the user
+                            const newUser = new User();
 
-            // check to see if theres already a user with that email
-            if (user) {
-                return done(null, false);
-            } else {
+                            // set the user's local credentials
+                            newUser.email    = email;
+                            newUser.username = req.body.username
+                            newUser.password = newUser.generateHash(password);
 
-                // if there is no user with that email
-                // create the user
-                var newUser            = new User();
-
-                // set the user's local credentials
-                newUser.email    = email;
-                newUser.username = req.body.username
-                newUser.password = newUser.generateHash(password);
-
-                // save the user
-                newUser.save(function(err) {
-                    if (err)
-                        throw err;
-                    return done(null, newUser);
-                });
-            }
-
-        });    
-
+                            // save the user
+                            newUser.save(function(err) {
+                                if (err)
+                                    throw err;
+                                return done(null, newUser);
+                            });
+                        }
+                    }) 
+                }
+            });   
         });
-
-        
-
-
     }));
 
     passport.use('local-login', new LocalStrategy({
@@ -89,11 +88,11 @@ module.exports = function(passport) {
         passwordField : 'password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    function(req, email, password, done) { // callback with email and password from our form
+    function(req, username, password, done) { // callback with username and password from our form
 
-        // find a user whose email is the same as the forms email
+        // find a user whose username is the same as the forms username
         // we are checking to see if the user trying to login already exists
-        User.findOne({ 'email' :  email }, function(err, user) {
+        User.findOne({ 'username' :  username }, function(err, user) {
             // if there are any errors, return the error before anything else
             if (err)
                 return done(err);
@@ -109,7 +108,5 @@ module.exports = function(passport) {
             // all is well, return successful user
             return done(null, user);
         });
-
     }));
-
 };

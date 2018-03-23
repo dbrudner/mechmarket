@@ -23,8 +23,8 @@ class Form extends Component {
         this.state = {
             user: {
                 username: '',
-                password: '',
                 email: '',
+                password: '',                
                 password_confirm: '',
             },
             
