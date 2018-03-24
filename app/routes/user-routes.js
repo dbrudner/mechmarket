@@ -10,37 +10,17 @@ module.exports = {
     // Signup
     signup: function(app, passport, route) {
         app.post(route, passport.authenticate('local-signup'), (req, res) => {
+        
             res.json('signing up')
         })
     },
 
     login: function(app, passport, route) {
+
         app.post(route, passport.authenticate('local-login'), ((req, res) => {
-            console.log('oggging in')            
-            res.json('logging in')
+            res.json('logged in')
         }));
     },
-
-
-    // Login
-    // login: function(app, passport, route) {
-    //     let error;
-    //     app.post(route, passport.authenticate('local-login',
-    //     (err, user, info) => {
-    //         if (err) {
-    //             console.log(err)
-    //             error = err
-    //         }
-    //     }),
-    //     (req, res) => {
-    //         console.log('error')
-    //         if (error) {
-    //             res.json(error)
-    //         }
-    //         res.json('logging in')
-    //     });
-    // },
-
 
     // Logout
     logout: function(app, route) {
@@ -49,7 +29,6 @@ module.exports = {
             res.json('logging out');
         });
     },
-
 
     // Used to find if user is logged in
     test: function(app, route) {

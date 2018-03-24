@@ -34,11 +34,11 @@ class LoginOrRegister extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        const email = this.state.username.trim()
+        const username = this.state.username.trim()
         const password = this.state.password.trim()
 
         axios.post('/login', {
-            email, password
+            username, password
         })
         .then(res => {
             console.log('res')

@@ -34,28 +34,27 @@ module.exports = function(passport) {
     // by default, if there was no name, it would just be called 'local'
 
     passport.use('local-signup', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
-        usernameField : 'email',
+        usernameField : 'username',
         passwordField : 'password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    function(req, email, password, done) {
+    function(req, username, password, done) {
 
         // asynchronous
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
-            // find a user whose email is the same as the forms email
+            // find a user whose username is the same as the forms username
             // we are checking to see if the user trying to login already exists
-            User.findOne({ 'email' :  email }, function(err, user) {
+            User.findOne({ 'username' :  username }, function(err, user) {
                 // if there are any errors, return the error
                 if (err)
                     return done(err);
 
-                // check to see if theres already a user with that email
+                // check to see if theres already a user with that username
                 if (user) {
-                    return done(null, false, {message: 'Email already exists'});
+                    return done(null, false, {message: 'username already exists'});
                 } else {
-                    // if there is no user with that email
+                    // if there is no user with that username
                     // check is theres a user with username
                     User.findOne({'username': req.body.username}, function(err, user) {
                         if (user) {
@@ -65,7 +64,6 @@ module.exports = function(passport) {
                             const newUser = new User();
 
                             // set the user's local credentials
-                            newUser.email    = email;
                             newUser.username = req.body.username
                             newUser.password = newUser.generateHash(password);
 
@@ -83,8 +81,8 @@ module.exports = function(passport) {
     }));
 
     passport.use('local-login', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
-        usernameField : 'email',
+        // These are the fields the route uses to confirm a user. Can be changed (i.e., changing 'username' to 'email' matches a user with same email)
+        usernameField : 'username',
         passwordField : 'password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },

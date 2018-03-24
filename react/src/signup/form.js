@@ -15,7 +15,7 @@ const Label = styled.span`
 const SubmitButton = styled.button``
 
 
-class Form extends Component {   
+class Form extends Component {
 
     constructor(props) {
         super(props)
@@ -23,13 +23,13 @@ class Form extends Component {
         this.state = {
             user: {
                 username: '',
-                email: '',
-                password: '',                
+                password: '',
                 password_confirm: '',
+                
             },
-            
-            redirectTo: null            
-        }            
+            error: null,
+            redirectTo: null
+        }
     }
 
     renderInput = name => {
@@ -41,7 +41,7 @@ class Form extends Component {
                 <Label>
                     {label}
                 </Label>
-                <input key={name} value={this.state.user[name]} type='text' onChange={event => this.handleChange(name, event.target.value)} />            
+                <input key={name} value={this.state.user[name]} type='text' onChange={event => this.handleChange(name, event.target.value)} />
             </div>
         )
     }
@@ -56,8 +56,11 @@ class Form extends Component {
 
     handleSubmit = event => {
         event.preventDefault()
+        if (this.state.user.password !== this.state.user.password_confirm) {
+            return this.setState({error: "Passwords don't match"})
+        }
+
         const user = this.state.user
-        const {email, password} = user
 
         axios.post('/signup', user)
         .then(res => {
@@ -67,17 +70,23 @@ class Form extends Component {
                 this.props.Login(res.data)
                 this.props.closeModal()
             })
-            
+
         }).catch (err => {
+            this.setState({
+                error: 'Username taken'
+            })
             throw err
         })
     }
-    
+
     render() {
         return (
             <FormContainer>
                 <form onSubmit={this.handleSubmit}>
                     {this.renderAllInputs()}
+                    <div>
+                        {this.state.error || null}
+                    </div>
                     <SubmitButton>Submit</SubmitButton>
                 </form>
             </FormContainer>
