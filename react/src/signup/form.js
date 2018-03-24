@@ -56,7 +56,7 @@ class Form extends Component {
 
     handleSubmit = event => {
         event.preventDefault()
-        if (this.state.user.password !== this.state.user.password_confirm) {
+        if (this.state.password === this.state.password_confirm) {
             return this.setState({error: "Passwords don't match"})
         }
 

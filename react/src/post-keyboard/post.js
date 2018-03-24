@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import axios from 'axios'
 import TextField from 'material-ui/TextField'
 
-import SubmitButton from './submit-button'
 
 import {connect} from 'react-redux'
 
@@ -14,6 +13,21 @@ const PostContainer = styled.div`
 
 const Label = styled.span`
     margin-right: 3rem;
+`
+
+const SubmitButton = styled.div`
+    background-color: gray;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    color: #f3f3f3;
+    cursor: pointer;
+    margin-top: 2rem;
+`
+
+const Header = styled.div`
+    text-transform: uppercase;
+    text-align: center;
 `
 
 class Post extends Component {
@@ -34,8 +48,8 @@ class Post extends Component {
         }
     }
 
-    handleChange = (name, value) => {
-        this.setState({keyboard: {...this.state.keyboard, [name]: value}})
+    handleChange = (id, value) => {
+        this.setState({keyboard: {...this.state.keyboard, [id]: value}})
     }
 
     renderInput = name => {
@@ -55,6 +69,7 @@ class Post extends Component {
         })
     }
 
+
     handleSubmit = event => {
         event.preventDefault();
 
@@ -72,19 +87,16 @@ class Post extends Component {
     }
 
     render() {
-        console.log(this.props)
-        
+        console.log(this.state)
         return (
             <PostContainer>
+                <Header>
+                    Share/Sell a keyboard
+                </Header>
                 <form onSubmit={this.handleSubmit}>
-                    {/* {this.renderAllInputs()} */}
-                    <TextField
-                        hintText="Hint Text"
-                        floatingLabelText="Fixed Floating Label Text"
-                        floatingLabelFixed={true}
-                        />
+                    {this.renderAllInputs()}
                     <SubmitButton>
-                        Submit
+                        Submit Keyboard
                     </SubmitButton>
                 </form>         
             </PostContainer>
