@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import { Login, logout, postKeyboard } from '../actions/index';
+import { Login, logout, postKeyboard } from '../actions';
 import LoginOrRegister from './login-or-register'
 import UserInfo from './user-info'
 

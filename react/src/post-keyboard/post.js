@@ -5,6 +5,8 @@ import TextField from 'material-ui/TextField'
 
 
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {previewKeyboard} from '../actions'
 
 const PostContainer = styled.div`
     font-size: 2rem;
@@ -23,6 +25,7 @@ const SubmitButton = styled.div`
     color: #f3f3f3;
     cursor: pointer;
     margin-top: 2rem;
+    text-transform: uppercase;
 `
 
 const Header = styled.div`
@@ -43,8 +46,7 @@ class Post extends Component {
                 keycaps: '',
                 switches: '',
                 imgUrl: ''
-            }
-            
+            },            
         }
     }
 
@@ -70,33 +72,38 @@ class Post extends Component {
     }
 
 
-    handleSubmit = event => {
-        event.preventDefault();
-
+    handleClick = event => {
+        
         // Keyboard object with all state input values and userid
-        
         const keyboard = {...this.state.keyboard, userId: this.props.userInfo._id}
+
+        // Changes state in modal to show a preview of submitted keyboard
+        this.props.showPreview()
+
+        // Puts keyboard into redux store
+        this.props.previewKeyboard(keyboard)
         
-        axios.post('/api/new/keyboard', keyboard)
-        .then(res => {
-            console.log(res)
-        })
-        .catch(err => {
-            console.log(err)
-        })
+        // Posts keyboard to db
+        // axios.post('/api/new/keyboard', keyboard)
+        // .then(res => {
+        //     console.log(res)
+        // })
+        // .catch(err => {
+        //     console.log(err)
+        // })
     }
 
     render() {
-        console.log(this.state)
+        console.log(this.props)
         return (
             <PostContainer>
                 <Header>
                     Share/Sell a keyboard
                 </Header>
-                <form onSubmit={this.handleSubmit}>
+                <form>
                     {this.renderAllInputs()}
-                    <SubmitButton>
-                        Submit Keyboard
+                    <SubmitButton onClick={this.handleClick}>
+                        Preview Submission
                     </SubmitButton>
                 </form>         
             </PostContainer>
@@ -106,7 +113,15 @@ class Post extends Component {
 
 function mapStateToProps(state) {
     return {
-        userInfo: state.userInfo
+        userInfo: state.userInfo,
+        previewKeyboard: state.previewKeyboard
     }
 }
-export default connect(mapStateToProps)(Post)
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({previewKeyboard}, dispatch)
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post)

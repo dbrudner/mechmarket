@@ -10,7 +10,7 @@ class PostKeyboard extends Component {
         console.log()
         return (
             <div>
-                {this.props.state.userInfo ? <Post/> : <NoUserInfo/>}
+                {this.props.state.userInfo ? <Post showPreview={this.props.showPreview}/> : <NoUserInfo/>}
             </div>
         )
     }

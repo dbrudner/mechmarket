@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Modal from 'react-responsive-modal'
+import styled from 'styled-components'
 
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -7,17 +8,19 @@ import { postKeyboard } from '../actions/index';
 
 import PostKeyboard from './post-keyboard'
 
+import SingleKeyboard from '../single-keyboard/single-keyboard'
+
+
 class Signup extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            open: true
+            open: true,
+            showPreview: false
         }
     }
     
-    
-
     onOpenModal = () => {
         this.setState({ open: true });
     };
@@ -29,14 +32,16 @@ class Signup extends Component {
 
     };
 
+    showPreview = () => {
+        this.setState({showPreview: true})
+    }
+
     render() {
         const { open } = this.state;
         return (
-            <div>
-                <Modal open={open} onClose={this.onCloseModal} little>
-                    <PostKeyboard/>
-                </Modal>
-            </div>
+            <Modal open={open} onClose={this.onCloseModal}>
+                {this.state.showPreview ? <SingleKeyboard preview/> : <PostKeyboard showPreview={this.showPreview}/>}
+            </Modal>
         );
     }
 }

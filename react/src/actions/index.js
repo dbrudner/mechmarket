@@ -36,3 +36,10 @@ export function postKeyboard(boolean) {
         payload: boolean
     }
 }
+
+export function previewKeyboard(keyboard) {
+    return {
+        type: types.PREVIEW_KEYBOARD,
+        payload: keyboard
+    }
+}
