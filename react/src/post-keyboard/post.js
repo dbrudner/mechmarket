@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField'
 
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import {previewKeyboard} from '../actions'
+import {previewKeyboard, showPreviewKeyboard} from '../actions'
 
 const PostContainer = styled.div`
     font-size: 2rem;
@@ -78,11 +78,12 @@ class Post extends Component {
         const keyboard = {...this.state.keyboard, userId: this.props.userInfo._id}
 
         // Changes state in modal to show a preview of submitted keyboard
-        this.props.showPreview()
+        this.props.closeModal()
 
         // Puts keyboard into redux store
         this.props.previewKeyboard(keyboard)
-        
+
+        this.props.showPreviewKeyboard(true)
         // Posts keyboard to db
         // axios.post('/api/new/keyboard', keyboard)
         // .then(res => {
@@ -94,7 +95,6 @@ class Post extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <PostContainer>
                 <Header>
@@ -114,12 +114,13 @@ class Post extends Component {
 function mapStateToProps(state) {
     return {
         userInfo: state.userInfo,
-        previewKeyboard: state.previewKeyboard
+        previewKeyboard: state.previewKeyboard,
+        showPreviewKeyboard: state.showPreviewKeyboard
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({previewKeyboard}, dispatch)
+    return bindActionCreators({previewKeyboard, showPreviewKeyboard}, dispatch)
 }
 
 

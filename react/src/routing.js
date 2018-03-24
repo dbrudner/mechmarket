@@ -13,7 +13,7 @@ import PostKeyboardModal from './post-keyboard/post-keyboard-modal'
 import SearchKeyboard from './search-keyboard/search-keyboard'
 import Home from './home/home'
 import Signup from './signup/signup'
-
+import SingleKeyboard from './single-keyboard/single-keyboard'
 
 class App extends Component {
     constructor(props) {
@@ -31,6 +31,7 @@ class App extends Component {
     }
 
     render() {
+        console.log(this.props.state)
 		return (
             <Router>
                 <div>
@@ -39,7 +40,7 @@ class App extends Component {
 
                     {this.props.state.openSignUp ? <Signup closeModal={this.closeSignupModal}/> : null}
                     {this.props.state.postKeyboard ? <PostKeyboardModal closeModal={this.closeSignupModal}/> : null}                    
-                    
+                    {this.props.state.showPreviewKeyboard ? <SingleKeyboard preview/> : null}
                     <Route exact path='/' component={Home} />
                     <Route exact path='/keyboards' component={SearchKeyboard} /> 
                 </div>

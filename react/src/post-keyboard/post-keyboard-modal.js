@@ -40,7 +40,7 @@ class Signup extends Component {
         const { open } = this.state;
         return (
             <Modal open={open} onClose={this.onCloseModal}>
-                {this.state.showPreview ? <SingleKeyboard preview/> : <PostKeyboard showPreview={this.showPreview}/>}
+                <PostKeyboard closeModal={this.onCloseModal}/>
             </Modal>
         );
     }

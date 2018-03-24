@@ -43,3 +43,10 @@ export function previewKeyboard(keyboard) {
         payload: keyboard
     }
 }
+
+export function showPreviewKeyboard(boolean) {
+    return {
+        type: types.SHOW_PREVIEW_KEYBOARD,
+        payload: boolean
+    }
+}

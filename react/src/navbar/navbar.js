@@ -101,7 +101,6 @@ class Navbar extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <NavbarContainer>
                 <Brand>
