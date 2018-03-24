@@ -2,7 +2,7 @@ const userRoutes = require('./user-routes')
 const keyboardRoutes = require('./keyboard-routes')
 const reactRoutes = require('./react-routes')
 
-module.exports = function(app, passport) {
+module.exports = function (app, passport) {
     // Gets all keyboards
     keyboardRoutes.getAllKeyboards(app, '/api/keyboards/all')
 
@@ -18,6 +18,7 @@ module.exports = function(app, passport) {
 
     // Logs a user in
     userRoutes.login(app, passport, '/login')
+    
 
     // Signs up
     userRoutes.signup(app, passport, '/signup')

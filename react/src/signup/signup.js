@@ -16,8 +16,6 @@ class Signup extends Component {
         }
     }
     
-    
-
     onOpenModal = () => {
         this.setState({ open: true });
     };

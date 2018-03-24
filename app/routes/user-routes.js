@@ -14,14 +14,32 @@ module.exports = {
         })
     },
 
-
-    // Login
     login: function(app, passport, route) {
         app.post(route, passport.authenticate('local-login'), ((req, res) => {
             console.log('oggging in')            
             res.json('logging in')
         }));
     },
+
+
+    // Login
+    // login: function(app, passport, route) {
+    //     let error;
+    //     app.post(route, passport.authenticate('local-login',
+    //     (err, user, info) => {
+    //         if (err) {
+    //             console.log(err)
+    //             error = err
+    //         }
+    //     }),
+    //     (req, res) => {
+    //         console.log('error')
+    //         if (error) {
+    //             res.json(error)
+    //         }
+    //         res.json('logging in')
+    //     });
+    // },
 
 
     // Logout
