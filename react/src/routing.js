@@ -41,8 +41,8 @@ class App extends Component {
 
                     {this.props.state.openSignUp ? <Signup closeModal={this.closeSignupModal}/> : null}
                     {this.props.state.postKeyboard ? <PostKeyboardModal closeModal={this.closeSignupModal}/> : null}
-                    {this.props.state.showPreviewKeyboard ? <SingleKeyboard preview/> : null}
-                    <Route exact path='/' component={Home} />
+                    {/* {this.props.state.showPreviewKeyboard ? <SingleKeyboard preview/> : null} */}
+                    <Route exact path='/' component={SingleKeyboard} />
                     <Route exact path='/keyboards' component={SearchKeyboard} />
                     <Route exact path='/keyboard/preview' component={SingleKeyboard} />
                 </div>
