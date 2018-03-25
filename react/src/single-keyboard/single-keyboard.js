@@ -9,15 +9,9 @@ class SingleKeyboard extends Component {
     constructor(props) {
         super(props)
 
-        if (this.props.preview) {
-            this.state = {
-                user: this.props.state.userInfo,
-                keyboard: this.props.state.previewKeyboard
-            }
-        } else {
-            this.state = {
-                keyboard: {}
-            }
+        this.state = {
+            user: this.props.state.userInfo,
+            keyboard: this.props.state.previewKeyboard
         }
     }
 

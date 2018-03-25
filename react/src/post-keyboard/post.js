@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import TextField from 'material-ui/TextField'
-
+import { Redirect } from 'react-router-dom';
 
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -45,7 +44,8 @@ class Post extends Component {
                 condition: '',
                 keycaps: '',
                 switches: '',
-                imgUrl: ''
+                imgUrl: '',
+                fireRedirect: null
             },            
         }
     }
@@ -77,13 +77,17 @@ class Post extends Component {
         // Keyboard object with all state input values and userid
         const keyboard = {...this.state.keyboard, userId: this.props.userInfo._id}
 
-        // Changes state in modal to show a preview of submitted keyboard
+        // Closes Modal
         this.props.closeModal()
 
         // Puts keyboard into redux store
         this.props.previewKeyboard(keyboard)
 
+        // Sets redux store boolean for preview keyboard to true. I think I can get rid of this
         this.props.showPreviewKeyboard(true)
+
+        this.setState({redirect: '/keyboards/preview'})
+
         // Posts keyboard to db
         // axios.post('/api/new/keyboard', keyboard)
         // .then(res => {
@@ -95,6 +99,11 @@ class Post extends Component {
     }
 
     render() {
+
+        if (this.state.redirect) {
+            return <Redirect to={{ pathname: this.state.redirect}} />
+        }
+
         return (
             <PostContainer>
                 <Header>
