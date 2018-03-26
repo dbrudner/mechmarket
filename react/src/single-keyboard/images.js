@@ -31,24 +31,42 @@ const ImgContainer = styled.div`
         margin-left: 2.5rem;
     }
 `
-
+const ImagesContainer = styled.div`
+    padding-top: 1rem;
+    border: 2px solid #f3f3f3
+    border-radius: 5px;
+    margin-bottom: 2rem;
+`
+const Helper = styled.div`
+    text-align: center;
+    margin-bottom: 1rem;
+    font-style: italic;
+    color: #d4d4d4;
+`
 
 export default function Images(props) {
     console.log(props)
     return (
-        <div>
+        <ImagesContainer>
             <Arrows>
                 <div onClick={() => props.showPreviousImage()}>
                     <i className="icon fas fa-arrow-left"></i>
+                </div>
+                <div>
+                    {props.currentImage + 1}/{props.imgs.length}
                 </div>
                 <div onClick={() => props.showNextImage()}>
                     <i className="icon fas fa-arrow-right"></i>
                 </div>
             </Arrows>
+            
             <ImgContainer>
                 <img onClick={() => props.openModal()} src={props.imgs[props.showImg]} />
             </ImgContainer>
-        </div>
+            <Helper>
+                Click image to enlarge
+            </Helper>
+        </ImagesContainer>
     )
     
 }

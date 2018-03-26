@@ -9,6 +9,8 @@ import {SingleKeyboardContainer} from './single-keyboard-container'
 import Images from './images'
 import NoImages from './no-images'
 
+
+
 const SubmitButton = styled.div`
     background-color: #61ccd2;
     color: white;
@@ -20,7 +22,7 @@ const SubmitButton = styled.div`
     border: 2px solid #61ccd2;
     color: white;
     transition: all .2s;
-    
+
     :hover {
         background-color: white;
         color: #61ccd2;
@@ -41,7 +43,8 @@ const Change = styled.div`
 `
 
 const imgs = [
-    
+    'https://geekhack.org/index.php?action=dlattach;topic=57723.0;attach=63093;image',
+    'https://i.redd.it/1a1l70dgdq7z.jpg'
 ]
 
 const InfoContainer = styled.div`
@@ -82,8 +85,6 @@ class SingleKeyboard extends Component {
         //     keyboard: this.props.state.previewKeyboard
         // }
 
-        console.log(this.props.state.previewKeyboard)
-
         if (this.props.match.params.param === 'preview') {
             this.state = {
                 keyboard: {
@@ -97,18 +98,35 @@ class SingleKeyboard extends Component {
                     imgs: imgs
                 },
                 open: false,
-                showImage: 0
+                showImage: 0,
+                user: {}
             }
-            
+
         } else {
             this.state = {
-                keyboard: this.props.state.previewKeyboard,
+                keyboard: {
+                    name: '',
+                    size: '',
+                    layout: '',
+                    condition: '',
+                    keycaps: '',
+                    switches: '',
+                    forSale: null,
+                    imgs: []
+                },
                 open: false,
                 showImage: 0
             }
-        }   
+        }
+    }
 
-        
+    componentDidMount() {
+        const keyboardId = this.props.match.params.param
+        // If we're rendering a single component and not a preview for submission, make a request for a keyboard with id matching param
+        if (keyboardId !== 'preview') {
+            axios.get(`/keyboard/${keyboardId}`)
+            .then(response => this.setState({keyboard: response.data}))
+        }
     }
 
     submitKeyboard = () => {
@@ -118,7 +136,7 @@ class SingleKeyboard extends Component {
         let keyboard = this.state.keyboard
 
         // Add user's ID to keyboard object
-        keyboard.userId = this.props.state.userInfo._id        
+        keyboard.userId = this.props.state.userInfo._id
 
         // Posts keyboard to db
         axios.post('/api/new/keyboard', keyboard)
@@ -150,7 +168,7 @@ class SingleKeyboard extends Component {
     }
 
     renderImages = () => {
-        const keyboard = this.state.keyboard        
+        const keyboard = this.state.keyboard
         return (
             <Images
                 showPreviousImage={this.showPreviousImage}
@@ -158,7 +176,17 @@ class SingleKeyboard extends Component {
                 imgs={keyboard.imgs}
                 showImg={this.state.showImage}
                 openModal={() => this.modal(true)}
+                currentImage={this.state.showImage}
             />
+        )
+    }
+
+    renderModal = () => {
+        const keyboard = this.state.keyboard
+        return (
+            <Modal open={this.state.open} onClose={() => this.modal(false)} >
+                <img src={keyboard.imgs[this.state.showImage]} style={{width: '100%'}}/>
+            </Modal>
         )
     }
 
@@ -168,9 +196,7 @@ class SingleKeyboard extends Component {
 
         return (
             <SingleKeyboardContainer>
-                <Modal open={this.state.open} onClose={() => this.modal(false)} >
-                    <img src={keyboard.imgs[this.state.showImage]} style={{width: '100%'}}/>
-                </Modal>
+                {keyboard.imgs.length > 0 ? this.renderModal() : null}
                 <InfoContainer>
                     <Header>
                         <h3>Keyboard Name</h3>

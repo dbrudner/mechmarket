@@ -13,8 +13,10 @@ const keyboardSchema = new Schema({
     custom: Boolean,
     sold: Boolean,
     condition: String,
-    imgUrl: String,
+    imgs: Array,
     plate: String,
+    keycaps: String,
+    hasKeycaps: Boolean,
     forSale: Boolean,
     upvotes: {
         type: Number,

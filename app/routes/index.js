@@ -9,6 +9,8 @@ module.exports = function (app, passport) {
     // Post a new keyboard
     keyboardRoutes.postKeyboard(app, '/api/new/keyboard')
 
+    // Get one keyboard
+    keyboardRoutes.getOneKeyboard(app, '/keyboard/:id')
 
     // Checks if a user is logged in
     userRoutes.test(app, '/test')

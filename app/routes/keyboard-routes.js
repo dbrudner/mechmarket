@@ -27,6 +27,7 @@ module.exports = {
         app.get(route, (req, res) => {
             const id = req.params.id
             db.Keyboard.findOne({_id: id})
+            .populate('userId')
             .exec((err, result) => {res.json(result)})
         })
     }
