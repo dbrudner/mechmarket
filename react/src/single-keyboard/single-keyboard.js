@@ -7,6 +7,7 @@ import Modal from 'react-responsive-modal'
 
 import {SingleKeyboardContainer} from './single-keyboard-container'
 import Images from './images'
+import NoImages from './no-images'
 
 const SubmitButton = styled.div`
     background-color: #61ccd2;
@@ -40,8 +41,7 @@ const Change = styled.div`
 `
 
 const imgs = [
-    'https://geekhack.org/index.php?action=dlattach;topic=57723.0;attach=63093;image',
-    'https://i.redd.it/1a1l70dgdq7z.jpg'
+    
 ]
 
 const InfoContainer = styled.div`
@@ -149,6 +149,19 @@ class SingleKeyboard extends Component {
         } else this.setState({showImage: this.state.keyboard.imgs.length - 1})
     }
 
+    renderImages = () => {
+        const keyboard = this.state.keyboard        
+        return (
+            <Images
+                showPreviousImage={this.showPreviousImage}
+                showNextImage={this.showNextImage}
+                imgs={keyboard.imgs}
+                showImg={this.state.showImage}
+                openModal={() => this.modal(true)}
+            />
+        )
+    }
+
     render() {
 
         const keyboard = this.state.keyboard
@@ -163,13 +176,7 @@ class SingleKeyboard extends Component {
                         <h3>Keyboard Name</h3>
                         <h5><Link to='/user/id'>username</Link></h5>
                     </Header>
-                    <Images
-                        showPreviousImage={this.showPreviousImage}
-                        showNextImage={this.showNextImage}
-                        imgs={keyboard.imgs}
-                        showImg={this.state.showImage}
-                        openModal={() => this.modal(true)}
-                    />
+                    {keyboard.imgs.length > 0 ? this.renderImages() : <NoImages/>}
                     <Info>
                         <div>
                             <Change>(Change)</Change>
