@@ -66,9 +66,7 @@ class SingleKeyboard extends Component {
         if (keyboardId !== 'preview') {
             axios.get(`/keyboard/${keyboardId}`)
             .then(response => this.setState({keyboard: response.data, message: {...this.state.message, subject: response.data.name}}))
-        } 
-        
-        if (this.props.state.userInfo) {
+        } else {
             console.log(this.props.state.userInfo)
             this.setState({
                 keyboard: {...this.state.keyboard, user: this.props.state.userInfo}
@@ -165,7 +163,7 @@ class SingleKeyboard extends Component {
                     <InfoContainer>
                         <Header>
                             <h3>Keyboard Name</h3>
-                            <h5><Link target='_blank' to={`/user/${keyboard.userId._id}`}>{keyboard.userId.username}</Link></h5>
+                            <h5><Link target='_blank' to={`/user/${keyboard.user._id}`}>{keyboard.user.username}</Link></h5>
                         </Header>
                         {keyboard.imgs.length > 0 ? this.renderImages() : <NoImages/>}
                         <Info>
