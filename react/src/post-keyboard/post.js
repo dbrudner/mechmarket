@@ -37,7 +37,8 @@ class Post extends Component {
             keycaps: [],
             addImageModal: false,
             imgUrl: '',
-            previewImg: ''
+            previewImg: '',
+            showImage: 0
         }
     }
 
@@ -191,6 +192,38 @@ class Post extends Component {
         )
     }
 
+    showNextImage = () => {
+
+        if (this.state.showImage < this.state.keyboard.imgs.length - 1) {
+            this.setState({
+                showImage: this.state.showImage + 1
+            })
+        } else this.setState({showImage: 0})
+    }
+
+    showPreviousImage = () => {
+        if (this.state.showImage !== 0) {
+            this.setState({
+                showImage: this.state.showImage - 1
+            })
+        } else this.setState({showImage: this.state.keyboard.imgs.length - 1})
+    }
+
+    deleteImg = () => {
+        const removeIndex = this.state.showImage
+        const imgs = this.state.keyboard.imgs.filter((img, index) => {
+            if (index !== removeIndex) {
+                return img
+            } else return
+        })
+        
+        
+        this.setState({
+            showImg: 0,
+            keyboard: {...this.state.keyboard, imgs}
+        })
+    }
+
     render() {
 
         if (this.state.redirect) {
@@ -211,7 +244,17 @@ class Post extends Component {
                     {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
                     {this.renderDatalist('Switches', 'switches', this.state.switches)}
                     <ImagesContainer>
-                        {this.state.keyboard.imgs.length > 0 ? <Images imgs={this.state.keyboard.imgs}/> : <NoImages/>}
+                        {this.state.keyboard.imgs.length > 0 
+                            ? <Images 
+                                showPreviousImage={this.showPreviousImage}
+                                showNextImage={this.showNextImage}
+                                imgs={this.state.keyboard.imgs}
+                                showImg={this.state.showImage}
+                                currentImage={this.state.showImage}
+                                noModal
+                                deleteImg={this.deleteImg}
+                            /> 
+                            : <NoImages/>}
                     </ImagesContainer>
                     <AddImageButton onClick={this.addImageClick}>Add image</AddImageButton>
                     <SubmitButton onClick={this.handleClick}>

@@ -45,7 +45,40 @@ const Helper = styled.div`
     color: #d4d4d4;
 `
 
+const Delete = styled.div`
+    text-align: center;
+
+    div {
+        text-align: center;
+        font-size: 1.2rem;
+        margin: 1rem auto;
+        display: inline-block;
+        color: #8c8c8c;        
+
+        :hover {
+            color: #9696ff;
+            transition: all .2s;
+            cursor: pointer;
+        }
+
+        span {
+            margin-left: .5rem;
+            font-size: 1.6rem;
+        }
+    }
+    
+`
+
 export default function Images(props) {
+
+    console.log(props.noModal)
+
+    const handleClick = () => {
+        if (props.noModal) {
+            props.openModal()
+        }
+    }
+
     return (
         <ImagesContainer>
             <Arrows>
@@ -61,11 +94,20 @@ export default function Images(props) {
             </Arrows>
             
             <ImgContainer>
-                <img onClick={() => props.openModal()} src={props.imgs[props.showImg]} />
+                <img onClick={handleClick} src={props.imgs[props.showImg]} />
             </ImgContainer>
-            <Helper>
-                Click image to enlarge
-            </Helper>
+            {props.noModal 
+            ? 
+            <Delete>
+                <div onClick={props.deleteImg}>
+                    Delete Picture 
+                    <span><i className="fas fa-trash-alt"></i></span>
+                </div>
+            </Delete>
+            : <Helper>Click to Enlarge</Helper>
+            
+        }
+            
         </ImagesContainer>
     )
     
