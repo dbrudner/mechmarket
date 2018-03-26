@@ -6,31 +6,13 @@ import { Redirect } from 'react-router-dom';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {previewKeyboard, showPreviewKeyboard} from '../actions'
+import Modal from 'react-responsive-modal'
 
-const PostContainer = styled.div`
-    font-size: 2rem;
-    padding: 3rem 10rem;
-`
+import {sizes, layouts, conditions} from './select-arrays'
+import {PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal} from './styles'
 
-const Label = styled.span`
-    margin-right: 3rem;
-`
-
-const SubmitButton = styled.div`
-    background-color: gray;
-    width: 100%;
-    text-align: center;
-    border-radius: 5px;
-    color: #f3f3f3;
-    cursor: pointer;
-    margin-top: 2rem;
-    text-transform: uppercase;
-`
-
-const Header = styled.div`
-    text-transform: uppercase;
-    text-align: center;
-`
+import ImgPreview from './img-preview'
+import AddImgButton from './add-img-button'
 
 class Post extends Component {
     constructor(props) {
@@ -44,23 +26,91 @@ class Post extends Component {
                 condition: '',
                 keycaps: '',
                 switches: '',
-                imgUrl: '',
-                fireRedirect: null
-            },            
+                imgs: [],
+            },
+            fireRedirect: null,
+            switches: [],
+            keycaps: [],
+            addImageModal: false,
+            imgUrl: '',
+            previewImg: ''
         }
+    }
+
+    componentDidMount() {
+        const keyboards = this.props.keyboards
+
+        // Used to get all switches and caps in database to use for datalist autocomplete
+        const keyboardReducer = (keyboards, part) => {
+            const parts = Object.keys(keyboards).reduce((acc, key) => {
+                if (keyboards[key][part] && !acc.includes(keyboards[key][part])) {
+                    return [...acc, keyboards[key][part]]                
+                }
+                return acc
+            }, [])
+
+            this.setState({[part]: parts})
+        }
+
+        const switches = keyboardReducer(keyboards, 'switches')
+        const keycaps = keyboardReducer(keyboards, 'keycaps')        
+
     }
 
     handleChange = (id, value) => {
         this.setState({keyboard: {...this.state.keyboard, [id]: value}})
     }
 
-    renderInput = name => {
+    renderInput = (label, key, options) => {
         return (
             <div>
                 <Label>
-                    {name.charAt(0).toUpperCase() + name.substr(1)}
+                    {label}
                 </Label>
-                <input key={name} value={this.state.keyboard[name]} type='text' onChange={event => this.handleChange(name, event.target.value)} />            
+                <input key={key} value={this.state.keyboard[key]} type='text' onChange={event => this.handleChange(key, event.target.value)} />
+            </div>
+        )
+    }
+
+    renderSelect = (label, key, options) => {
+
+        const renderOptions = options => {
+            return options.map(option => {
+                return <option value={option} key={option}>{option}</option>
+            })
+        }
+
+
+        return (
+            <div>
+                <Label>
+                    {label}
+                </Label>
+                <select>
+                    <option value={null}>{label}</option>
+                    {renderOptions(options)}
+                </select>
+            </div>
+        )
+    }
+
+    renderDatalist = (label, key, options) => {
+
+        const renderOptions = options => {
+            return options.map(option => {
+                return <option value={option} key={option}/>
+            })
+        }
+
+        return (
+            <div>
+                <Label>
+                    {label}
+                </Label>
+                <input list={key} value={this.state.keyboard[key]} onChange={event => this.handleChange(key, event.target.value)} />
+                <datalist id={key}>
+                    {renderOptions(options)}
+                </datalist>
             </div>
         )
     }
@@ -73,10 +123,10 @@ class Post extends Component {
 
 
     handleClick = event => {
-        
+
         // Keyboard object with all state input values and userid
         const keyboard = {...this.state.keyboard, userId: this.props.userInfo._id}
-
+        console.log(keyboard)
         // Closes Modal
         this.props.closeModal()
 
@@ -86,7 +136,7 @@ class Post extends Component {
         // Sets redux store boolean for preview keyboard to true. I think I can get rid of this
         this.props.showPreviewKeyboard(true)
 
-        this.setState({redirect: '/keyboards/preview'})
+        this.setState({redirect: '/preview'})
 
         // Posts keyboard to db
         // axios.post('/api/new/keyboard', keyboard)
@@ -98,23 +148,81 @@ class Post extends Component {
         // })
     }
 
+    imageModal = boolean => {
+        this.setState({addImageModal: boolean})
+    }
+
+    addImageClick = event => {
+        event.preventDefault()
+        this.imageModal(true)
+    }
+
+    addImage = event => {
+
+
+        const checkURL = url => {return url.match(/\.(jpeg|jpg|gif|png)$/) != null};
+        
+
+        event.preventDefault()
+
+
+        this.setState({
+            keyboard: {
+                ...this.state.keyboard, 
+                imgs: [...this.state.keyboard.imgs, this.state.imgUrl]
+            },
+            previewImg: '',
+            addImageModal: false
+        })
+    }
+
+    showPreviewImg = event => {
+        event.preventDefault()
+        this.setState({previewImg: this.state.imgUrl})
+    }
+
+    renderImageModal = () => {
+        return (
+            <Modal small open={this.state.addImageModal} onClose={() => this.imageModal(false)}>
+                <ImageModal>
+                    <div>Add an Image</div>
+                    <form onSubmit={this.showPreviewImg} >
+                        <input value={this.state.imgUrl} onChange={event => this.setState({imgUrl: event.target.value})}/>
+                        <button>Preview Image</button>
+                    </form>
+                    {this.state.previewImg ? <ImgPreview img={this.state.previewImg} /> : null}
+                    {this.state.previewImg ? <AddImgButton addImg={this.addImage}/> : null}                    
+                </ImageModal>
+            </Modal>
+        )
+    }
+
     render() {
 
+        console.log(this.state.keyboard)
+        
         if (this.state.redirect) {
             return <Redirect to={{ pathname: this.state.redirect}} />
         }
 
         return (
             <PostContainer>
+                {this.renderImageModal()}
                 <Header>
                     Share/Sell a keyboard
                 </Header>
                 <form>
-                    {this.renderAllInputs()}
+                    {this.renderInput('Name', 'name')}
+                    {this.renderSelect('Size', 'size', sizes)}
+                    {this.renderSelect('Layout', 'layout', layouts)}
+                    {this.renderSelect('Condition', 'condition', conditions)}
+                    {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
+                    {this.renderDatalist('Switches', 'switches', this.state.switches)}
+                    <AddImageButton onClick={this.addImageClick}>Add image</AddImageButton>                    
                     <SubmitButton onClick={this.handleClick}>
                         Preview Submission
                     </SubmitButton>
-                </form>         
+                </form>
             </PostContainer>
         )
     }
@@ -124,7 +232,8 @@ function mapStateToProps(state) {
     return {
         userInfo: state.userInfo,
         previewKeyboard: state.previewKeyboard,
-        showPreviewKeyboard: state.showPreviewKeyboard
+        showPreviewKeyboard: state.showPreviewKeyboard,
+        keyboards: state.keyboards
     }
 }
 

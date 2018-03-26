@@ -31,15 +31,6 @@ class App extends Component {
     }
 
     render() {
-        console.log(this.props.state.userInfo)
-
-        // Prevents a problem with async issues with redux store
-        // This appears if a user is not logged in or the server is waiting to register a logged in user
-        // Will also include a landing page
-        // This could make rest of app work funky. Temporary fix maybe.
-        if (this.props.state.userInfo === null) {
-            return <Navbar/>
-        }
 
 		return (
             <Router>

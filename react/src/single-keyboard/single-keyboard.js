@@ -59,7 +59,7 @@ class SingleKeyboard extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillReceiveProps(nextProps, nextState) {
         const keyboardId = this.props.match.params.param
 
         // If we're rendering a single component and not a preview for submission, make a request for a keyboard with id matching param
@@ -67,9 +67,8 @@ class SingleKeyboard extends Component {
             axios.get(`/keyboard/${keyboardId}`)
             .then(response => this.setState({keyboard: response.data, message: {...this.state.message, subject: response.data.name}}))
         } else {
-            console.log(this.props.state.userInfo)
             this.setState({
-                keyboard: {...this.state.keyboard, user: this.props.state.userInfo}
+                keyboard: {...this.props.state.previewKeyboard, user: nextProps.state.userInfo}
             })
         }
     }
@@ -146,8 +145,19 @@ class SingleKeyboard extends Component {
         )
     }
 
-    render() {
+    renderInfoItem = (label, key) => {
+        const keyboard = this.state.keyboard
+        
+        return (
+            <div>
+                <Change>(Change)</Change>
+                <strong>{label}: </strong>{keyboard[key]}
+            </div>
+        )
+    }
 
+    render() {
+        
         const keyboard = this.state.keyboard
         const param = this.props.match.params.param
 
@@ -168,22 +178,10 @@ class SingleKeyboard extends Component {
                         {keyboard.imgs.length > 0 ? this.renderImages() : <NoImages/>}
                         <Info>
                             {renderForSale(keyboard, param)}
-                            <div>
-                                <Change>(Change)</Change>
-                                <strong>Size: </strong>{keyboard.size}
-                            </div>
-                            <div>
-                                <Change>(Change)</Change>
-                                <strong>Layout: </strong>{keyboard.layout}
-                            </div>
-                            <div>
-                                <Change>(Change)</Change>
-                                <strong>Switches: </strong>{keyboard.switches}
-                            </div>
-                            <div>
-                                <Change>(Change)</Change>
-                                <strong>Keycaps: </strong>{keyboard.keycaps}
-                            </div>
+                            {this.renderInfoItem('Layout', 'layout')}
+                            {this.renderInfoItem('Switches', 'switches')}
+                            {this.renderInfoItem('Keycaps', 'keycaps')}
+                            {this.renderInfoItem('Condition', 'condition')}
                         </Info>
                         {param === 'preview' ? <SubmitButton onClick={this.submitKeyboard}>Submit</SubmitButton> : null}
                     </InfoContainer>

@@ -46,7 +46,6 @@ const Helper = styled.div`
 `
 
 export default function Images(props) {
-    console.log(props)
     return (
         <ImagesContainer>
             <Arrows>
