@@ -39,3 +39,7 @@ export const ImageModal = styled.div`
         margin-bottom: 3rem;
     }
 `
+
+export const ImagesContainer = styled.div`
+    margin: 3rem 0;
+`

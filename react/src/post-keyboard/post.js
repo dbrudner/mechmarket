@@ -9,10 +9,14 @@ import {previewKeyboard, showPreviewKeyboard} from '../actions'
 import Modal from 'react-responsive-modal'
 
 import {sizes, layouts, conditions} from './select-arrays'
-import {PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal} from './styles'
+import {PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer} from './styles'
 
 import ImgPreview from './img-preview'
 import AddImgButton from './add-img-button'
+import ImgList from './img-list'
+
+import Images from '../single-keyboard/images'
+import NoImages from '../single-keyboard/no-images'
 
 class Post extends Component {
     constructor(props) {
@@ -44,7 +48,7 @@ class Post extends Component {
         const keyboardReducer = (keyboards, part) => {
             const parts = Object.keys(keyboards).reduce((acc, key) => {
                 if (keyboards[key][part] && !acc.includes(keyboards[key][part])) {
-                    return [...acc, keyboards[key][part]]                
+                    return [...acc, keyboards[key][part]]
                 }
                 return acc
             }, [])
@@ -53,7 +57,7 @@ class Post extends Component {
         }
 
         const switches = keyboardReducer(keyboards, 'switches')
-        const keycaps = keyboardReducer(keyboards, 'keycaps')        
+        const keycaps = keyboardReducer(keyboards, 'keycaps')
 
     }
 
@@ -79,8 +83,6 @@ class Post extends Component {
                 return <option value={option} key={option}>{option}</option>
             })
         }
-
-
         return (
             <div>
                 <Label>
@@ -121,12 +123,11 @@ class Post extends Component {
         })
     }
 
-
     handleClick = event => {
 
         // Keyboard object with all state input values and userid
         const keyboard = {...this.state.keyboard, userId: this.props.userInfo._id}
-        console.log(keyboard)
+
         // Closes Modal
         this.props.closeModal()
 
@@ -136,16 +137,8 @@ class Post extends Component {
         // Sets redux store boolean for preview keyboard to true. I think I can get rid of this
         this.props.showPreviewKeyboard(true)
 
+        // Redirects to preview page
         this.setState({redirect: '/preview'})
-
-        // Posts keyboard to db
-        // axios.post('/api/new/keyboard', keyboard)
-        // .then(res => {
-        //     console.log(res)
-        // })
-        // .catch(err => {
-        //     console.log(err)
-        // })
     }
 
     imageModal = boolean => {
@@ -159,20 +152,21 @@ class Post extends Component {
 
     addImage = event => {
 
+        // Function to check if input contains an image tag
+        const checkURL = url => {return url.match(/\.(jpeg|jpg|gif|png)$/)};
 
-        const checkURL = url => {return url.match(/\.(jpeg|jpg|gif|png)$/) != null};
-        
 
         event.preventDefault()
 
 
         this.setState({
             keyboard: {
-                ...this.state.keyboard, 
+                ...this.state.keyboard,
                 imgs: [...this.state.keyboard.imgs, this.state.imgUrl]
             },
             previewImg: '',
-            addImageModal: false
+            addImageModal: false,
+            imgUrl: ''
         })
     }
 
@@ -191,7 +185,7 @@ class Post extends Component {
                         <button>Preview Image</button>
                     </form>
                     {this.state.previewImg ? <ImgPreview img={this.state.previewImg} /> : null}
-                    {this.state.previewImg ? <AddImgButton addImg={this.addImage}/> : null}                    
+                    {this.state.previewImg ? <AddImgButton addImg={this.addImage}/> : null}
                 </ImageModal>
             </Modal>
         )
@@ -199,8 +193,6 @@ class Post extends Component {
 
     render() {
 
-        console.log(this.state.keyboard)
-        
         if (this.state.redirect) {
             return <Redirect to={{ pathname: this.state.redirect}} />
         }
@@ -218,7 +210,10 @@ class Post extends Component {
                     {this.renderSelect('Condition', 'condition', conditions)}
                     {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
                     {this.renderDatalist('Switches', 'switches', this.state.switches)}
-                    <AddImageButton onClick={this.addImageClick}>Add image</AddImageButton>                    
+                    <ImagesContainer>
+                        {this.state.keyboard.imgs.length > 0 ? <Images imgs={this.state.keyboard.imgs}/> : <NoImages/>}
+                    </ImagesContainer>
+                    <AddImageButton onClick={this.addImageClick}>Add image</AddImageButton>
                     <SubmitButton onClick={this.handleClick}>
                         Preview Submission
                     </SubmitButton>
