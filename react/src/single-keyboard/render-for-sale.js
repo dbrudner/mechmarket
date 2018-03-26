@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const renderForSale = (keyboard) => {
+export const renderForSale = (keyboard, param) => {
 
     const style = {
         color: 'rgb(232, 58, 58)', 
@@ -20,16 +20,22 @@ export const renderForSale = (keyboard) => {
         color: 'black'
     }
 
+    const UserInfo = () => {
+        return (
+            <MessageUser>
+                Message User
+                <i style={envelopeIcon} className="fas fa-envelope"></i>                        
+            </MessageUser>
+        )
+    }
+
     if (keyboard.forSale) {
         return (
             <div style={{marginBottom: '2rem', textAlign: 'center', marginLeft: '-2.5rem'}}>
                 <div className='text-center' style={style}>
                     This Keyboard is For Sale
                 </div>
-                <MessageUser>
-                    Message User
-                    <i style={envelopeIcon} className="fas fa-envelope"></i>                        
-                </MessageUser>
+                {param === 'preview' ? null : <UserInfo/>}
             </div>
         )
     } else {

@@ -41,10 +41,8 @@ class LoginOrRegister extends Component {
             username, password
         })
         .then(res => {
-            console.log('res')
             axios.get('/test')
             .then(res => {
-                console.log(res)
                 if (res.data) {
                     this.setState({loginFail: false})
                     this.props.Login({...res.data, _id: res.data._id})
@@ -55,7 +53,6 @@ class LoginOrRegister extends Component {
             })
         })
         .catch(err => {
-            console.log(err)
             this.setState({loginFail: true})
         })
     }

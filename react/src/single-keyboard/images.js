@@ -28,7 +28,7 @@ const ImgContainer = styled.div`
         padding: .3rem;
         cursor: pointer;
         width: 25rem;
-        margin-left: 2.5rem;
+        margin-left: 2rem;
     }
 `
 const ImagesContainer = styled.div`
@@ -36,6 +36,7 @@ const ImagesContainer = styled.div`
     border: 2px solid #f3f3f3
     border-radius: 5px;
     margin-bottom: 2rem;
+    text-align: left;
 `
 const Helper = styled.div`
     text-align: center;

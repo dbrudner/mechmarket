@@ -28,7 +28,11 @@ class SingleKeyboard extends Component {
                     switches: 'MX Cherry Blue',
                     forSale: true,
                     imgs: imgs,
-                    user: {}
+                    user: null
+                },
+                message: {
+                    subject: '',
+                    content: ''
                 },
                 openImageModal: false,
                 openMessageModal: false,
@@ -57,10 +61,18 @@ class SingleKeyboard extends Component {
 
     componentDidMount() {
         const keyboardId = this.props.match.params.param
+
         // If we're rendering a single component and not a preview for submission, make a request for a keyboard with id matching param
         if (keyboardId !== 'preview') {
             axios.get(`/keyboard/${keyboardId}`)
-            .then(response => this.setState({keyboard: response.data}))
+            .then(response => this.setState({keyboard: response.data, message: {...this.state.message, subject: response.data.name}}))
+        } 
+        
+        if (this.props.state.userInfo) {
+            console.log(this.props.state.userInfo)
+            this.setState({
+                keyboard: {...this.state.keyboard, user: this.props.state.userInfo}
+            })
         }
     }
 
@@ -83,11 +95,8 @@ class SingleKeyboard extends Component {
         })
     }
 
-    modal = (modal, boolean) => {
-        console.log(modal)
-        console.log(boolean)
-        this.setState({[modal]: boolean})
-    }
+    modal = (modal, boolean) => this.setState({[modal]: boolean})
+    
 
     showNextImage = () => {
 
@@ -105,7 +114,7 @@ class SingleKeyboard extends Component {
             })
         } else this.setState({showImage: this.state.keyboard.imgs.length - 1})
     }
-
+    
     renderImages = () => {
         const keyboard = this.state.keyboard
         return (
@@ -131,7 +140,10 @@ class SingleKeyboard extends Component {
 
     renderMsgModal = () => {
         return (
-            <Modal open={this.state.openMessageModal} onClose={() => this.modal(false)} >
+            <Modal open={this.state.openMessageModal} onClose={() => this.modal('openMsgModal', false)} >
+                <div>
+
+                </div>
             </Modal>
         )
     }
@@ -139,41 +151,46 @@ class SingleKeyboard extends Component {
     render() {
 
         const keyboard = this.state.keyboard
+        const param = this.props.match.params.param
+
         console.log(keyboard)
 
-        if (!keyboard.userId) return null
+        if (!keyboard.user) return null
 
         return (
-            <SingleKeyboardContainer>
-                {keyboard.imgs.length > 0 ? this.renderImgModal() : null}
-                <InfoContainer>
-                    <Header>
-                        <h3>Keyboard Name</h3>
-                        <h5><Link target='_blank' to={`/user/${keyboard.userId._id}`}>{keyboard.userId.username}</Link></h5>
-                    </Header>
-                    {keyboard.imgs.length > 0 ? this.renderImages() : <NoImages/>}
-                    <Info>
-                        {renderForSale(keyboard)}
-                        <div>
-                            <Change>(Change)</Change>
-                            <strong>Size: </strong>{keyboard.size}
-                        </div>
-                        <div>
-                            <Change>(Change)</Change>
-                            <strong>Layout: </strong>{keyboard.layout}
-                        </div>
-                        <div>
-                            <Change>(Change)</Change>
-                            <strong>Switches: </strong>{keyboard.switches}
-                        </div>
-                        <div>
-                            <Change>(Change)</Change>
-                            <strong>Keycaps: </strong>{keyboard.keycaps}
-                        </div>
-                    </Info>
-                    {this.props.match.params.param === 'preview' ? <SubmitButton onClick={this.submitKeyboard}>Submit</SubmitButton> : null}
-                </InfoContainer>
-            </SingleKeyboardContainer>
+            <div style={{textAlign: 'center', marginTop: '3rem'}}>
+                <SingleKeyboardContainer>
+                    {keyboard.imgs.length > 0 ? this.renderImgModal() : null}
+                    {this.renderMsgModal()}
+                    <InfoContainer>
+                        <Header>
+                            <h3>Keyboard Name</h3>
+                            <h5><Link target='_blank' to={`/user/${keyboard.userId._id}`}>{keyboard.userId.username}</Link></h5>
+                        </Header>
+                        {keyboard.imgs.length > 0 ? this.renderImages() : <NoImages/>}
+                        <Info>
+                            {renderForSale(keyboard, param)}
+                            <div>
+                                <Change>(Change)</Change>
+                                <strong>Size: </strong>{keyboard.size}
+                            </div>
+                            <div>
+                                <Change>(Change)</Change>
+                                <strong>Layout: </strong>{keyboard.layout}
+                            </div>
+                            <div>
+                                <Change>(Change)</Change>
+                                <strong>Switches: </strong>{keyboard.switches}
+                            </div>
+                            <div>
+                                <Change>(Change)</Change>
+                                <strong>Keycaps: </strong>{keyboard.keycaps}
+                            </div>
+                        </Info>
+                        {param === 'preview' ? <SubmitButton onClick={this.submitKeyboard}>Submit</SubmitButton> : null}
+                    </InfoContainer>
+                </SingleKeyboardContainer>
+            </div>
         )
     }
 }
