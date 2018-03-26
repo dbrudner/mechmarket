@@ -6,25 +6,37 @@ import {Link} from 'react-router-dom'
 import Modal from 'react-responsive-modal'
 
 import {SingleKeyboardContainer} from './single-keyboard-container'
+import Images from './images'
 
-const ImgContainer = styled.div`
-    position: relative;
-    width: 30rem;
-    height: 22rem;
-    display: block;
-    margin: auto;
-
-    img {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        border: 1px solid #c7c4c4;
-        padding: .3rem;
-        cursor: pointer;
-        width: 25rem;
-        margin-left: 2.5rem;
+const SubmitButton = styled.div`
+    background-color: #61ccd2;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    margin: 1rem 1.5rem 1rem 2.5rem;
+    cursor: pointer;
+    color: gray;
+    border: 2px solid #61ccd2;
+    color: white;
+    transition: all .2s;
+    
+    :hover {
+        background-color: white;
+        color: #61ccd2;
+        transition: all .2s;
     }
+`
+
+const Info = styled.div`
+    margin-left: 2.5rem;
+`
+
+const Change = styled.div`
+    font-size: 1.2rem;
+    color: rgb(34.4%, 33%, 83.9%);
+    display: inline;
+    margin-right: 1rem;
+    cursor: pointer;
 `
 
 const imgs = [
@@ -39,16 +51,7 @@ const InfoContainer = styled.div`
     font-size: 1.6rem;
 `
 
-const Arrows = styled.div`
 
-    margin: 0 2rem 0 2.5rem;
-    display: flex;
-    justify-content: space-between;
-
-    div {
-        cursor: pointer;
-    }
-`
 
 const Header = styled.div`
     margin-bottom: 2rem;
@@ -79,23 +82,44 @@ class SingleKeyboard extends Component {
         //     keyboard: this.props.state.previewKeyboard
         // }
 
-        this.state ={
-            keyboard: {
-                name: 'keyboard',
-                size: '60%',
-                layout: 'ANSI',
-                condition: 'Used',
-                keycaps: 'None',
-                switches: 'MX Cherry Blue',
-                imgs: imgs
-            },
-            open: false,
-            showImage: 0
-        }
+        console.log(this.props.state.previewKeyboard)
+
+        if (this.props.match.params.param === 'preview') {
+            this.state = {
+                keyboard: {
+                    name: 'keyboard',
+                    size: '60%',
+                    layout: 'ANSI',
+                    condition: 'Used',
+                    keycaps: 'None',
+                    switches: 'MX Cherry Blue',
+                    forSale: true,
+                    imgs: imgs
+                },
+                open: false,
+                showImage: 0
+            }
+            
+        } else {
+            this.state = {
+                keyboard: this.props.state.previewKeyboard,
+                open: false,
+                showImage: 0
+            }
+        }   
+
+        
     }
 
     submitKeyboard = () => {
-        const keyboard = this.state.keyboard
+        if (!this.props.state.userInfo._id) return
+
+        // Create keyboard object for submission
+        let keyboard = this.state.keyboard
+
+        // Add user's ID to keyboard object
+        keyboard.userId = this.props.state.userInfo._id        
+
         // Posts keyboard to db
         axios.post('/api/new/keyboard', keyboard)
         .then(res => {
@@ -106,7 +130,7 @@ class SingleKeyboard extends Component {
         })
     }
 
-    closeModal = () => this.setState({open: false})
+    modal = boolean => this.setState({open: boolean})
 
     showNextImage = () => {
 
@@ -126,12 +150,12 @@ class SingleKeyboard extends Component {
     }
 
     render() {
-        console.log(this.state.showImage)
+
         const keyboard = this.state.keyboard
 
         return (
             <SingleKeyboardContainer>
-                <Modal open={this.state.open} onClose={this.closeModal} >
+                <Modal open={this.state.open} onClose={() => this.modal(false)} >
                     <img src={keyboard.imgs[this.state.showImage]} style={{width: '100%'}}/>
                 </Modal>
                 <InfoContainer>
@@ -139,22 +163,32 @@ class SingleKeyboard extends Component {
                         <h3>Keyboard Name</h3>
                         <h5><Link to='/user/id'>username</Link></h5>
                     </Header>
-                    <Arrows>
-                        <div onClick={() => this.showPreviousImage()}>
-                            <i className="icon fas fa-arrow-left"></i>
+                    <Images
+                        showPreviousImage={this.showPreviousImage}
+                        showNextImage={this.showNextImage}
+                        imgs={keyboard.imgs}
+                        showImg={this.state.showImage}
+                        openModal={() => this.modal(true)}
+                    />
+                    <Info>
+                        <div>
+                            <Change>(Change)</Change>
+                            <strong>Size: </strong>{keyboard.size}
                         </div>
-                        <div onClick={() => this.showNextImage()}>
-                            <i className="icon fas fa-arrow-right"></i>
+                        <div>
+                            <Change>(Change)</Change>
+                            <strong>Layout: </strong>{keyboard.layout}
                         </div>
-                    </Arrows>
-                    <ImgContainer>
-                        <img onClick={() => this.setState({open: true})} src={keyboard.imgs[this.state.showImage]} />
-                    </ImgContainer>
-                    
-                    <div><strong>Size: </strong>{keyboard.size}</div>
-                    <div><strong>Layout: </strong>{keyboard.layout}</div>
-                    <div><strong>Switches: </strong>{keyboard.switches}</div>
-                    <div><strong>Keycaps: </strong>{keyboard.keycaps}</div>
+                        <div>
+                            <Change>(Change)</Change>
+                            <strong>Switches: </strong>{keyboard.switches}
+                        </div>
+                        <div>
+                            <Change>(Change)</Change>
+                            <strong>Keycaps: </strong>{keyboard.keycaps}
+                        </div>
+                    </Info>
+                    <SubmitButton onClick={this.submitKeyboard}>Submit</SubmitButton>
                 </InfoContainer>
             </SingleKeyboardContainer>
         )

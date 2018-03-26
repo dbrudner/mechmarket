@@ -7,15 +7,6 @@ export const SingleKeyboardContainer = styled.div`
     border-radius: 3px;
     padding: 3rem 0;
 
-    img {
-        border: 1px solid black
-        padding: 1rem
-        width: 25rem;
-        margin: 0 auto;
-        display: block;
-        cursor: pointer;
-    }
-
     button {
         margin: 0 auto;
         display: block;

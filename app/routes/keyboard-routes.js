@@ -7,8 +7,9 @@ module.exports = {
     postKeyboard: function(app, route) {
         app.post(route, (req, res) => {
             const newKeyboard = {...req.body}
-            db.Keyboard.create(newKeyboard)
+            db.Keyboard.create(newKeyboard, (err, keyboard) => res.json(keyboard))
         })
+        
     },
 
     getAllKeyboards: function(app, route) {
