@@ -10,7 +10,7 @@ export default function AddImgButton(props) {
 
     return (
         <AddImgButton onClick={props.addImg}>
-            Add image
+            Add Image
         </AddImgButton>
     )
 }

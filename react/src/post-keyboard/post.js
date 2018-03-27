@@ -13,7 +13,6 @@ import {PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, 
 
 import ImgPreview from './img-preview'
 import AddImgButton from './add-img-button'
-import ImgList from './img-list'
 
 import Images from '../single-keyboard/images'
 import NoImages from '../single-keyboard/no-images'
@@ -23,19 +22,12 @@ class Post extends Component {
         super(props)
 
         this.state = {
-            keyboard: {
-                name: '',
-                size: '',
-                layout: '',
-                condition: '',
-                keycaps: '',
-                switches: '',
-                imgs: [],
-            },
+            keyboard: {...this.props.state.previewKeyboard, ...this.props.state.userInfo},
             fireRedirect: null,
             switches: [],
             keycaps: [],
             addImageModal: false,
+            openSingleImageModal: false,
             imgUrl: '',
             previewImg: '',
             showImage: 0,
@@ -44,7 +36,8 @@ class Post extends Component {
     }
 
     componentDidMount() {
-        const keyboards = this.props.keyboards
+        console.log(this.state.keyboard)
+        const keyboards = this.props.state.keyboards
 
         // Used to get all switches and caps in database to use for datalist autocomplete
         const keyboardReducer = (keyboards, part) => {
@@ -128,7 +121,7 @@ class Post extends Component {
     handleClick = event => {
 
         // Keyboard object with all state input values and userid
-        const keyboard = {...this.state.keyboard, userId: this.props.userInfo._id}
+        const keyboard = {...this.state.keyboard}
 
         // Closes Modal
         this.props.closeModal()
@@ -153,12 +146,7 @@ class Post extends Component {
     }
 
     addImage = event => {
-
-        // Function to check if input contains an image tag
-        const checkURL = url => {return url.match(/\.(jpeg|jpg|gif|png)$/)};
-
         event.preventDefault()
-
 
         this.setState({
             keyboard: {
@@ -176,6 +164,16 @@ class Post extends Component {
         this.setState({previewImg: this.state.imgUrl})
     }
 
+    // Renders a single image modal when keyboard preview image is clicked.
+    renderSingleImgModal = () => {
+        const keyboard = this.state.keyboard
+        return (
+            <Modal open={this.state.openSingleImageModal} onClose={() => this.openSingleImageModal(false)} >
+                <img src={keyboard.imgs[this.state.showImage]} style={{width: '100%'}}/>
+            </Modal>
+        )
+    }
+
     renderImageModal = () => {
         return (
             <Modal small open={this.state.addImageModal} onClose={() => this.imageModal(false)}>
@@ -191,6 +189,8 @@ class Post extends Component {
             </Modal>
         )
     }
+
+    openSingleImageModal = boolean => this.setState({openSingleImageModal: boolean})
 
     showNextImage = () => {
 
@@ -211,12 +211,21 @@ class Post extends Component {
 
     deleteImg = () => {
         const removeIndex = this.state.showImage
-        const imgs = this.state.keyboard.imgs.filter((img, index) => {
+        let imgs = this.state.keyboard.imgs
+
+        if (removeIndex === imgs.length - 1) {
+            imgs = this.state.keyboard.imgs.slice(0, imgs.length - 1)
+            return this.setState({
+                showImg: 0,
+                keyboard: {...this.state.keyboard, imgs}
+            })
+        }
+
+        imgs = this.state.keyboard.imgs.filter((img, index) => {
             if (index !== removeIndex) {
                 return img
             } else return
         })
-        
         
         this.setState({
             showImg: 0,
@@ -225,7 +234,8 @@ class Post extends Component {
     }
 
     imgLoadSuccess = boolean => {
-        this.setState({imgLoadSucess: boolean})
+        if (!boolean) return this.setState({imgLoadSucess: boolean, imgUrl: ''})        
+        else this.setState({imgLoadSucess: boolean})
     }
 
     render() {
@@ -237,6 +247,8 @@ class Post extends Component {
         return (
             <PostContainer>
                 {this.renderImageModal()}
+                {this.renderSingleImgModal()}
+                
                 <Header>
                     Share/Sell a keyboard
                 </Header>
@@ -255,12 +267,13 @@ class Post extends Component {
                                 imgs={this.state.keyboard.imgs}
                                 showImg={this.state.showImage}
                                 currentImage={this.state.showImage}
-                                noModal
                                 deleteImg={this.deleteImg}
+                                openModal={() => this.openSingleImageModal(true)}
+                                post
                             /> 
                             : <NoImages/>}
                     </ImagesContainer>
-                    <AddImageButton onClick={this.addImageClick}>Add image</AddImageButton>
+                    <AddImageButton onClick={this.addImageClick}> {!this.state.keyboard.imgs.length ? 'Add Image' : 'Add Another Image'} </AddImageButton>
                     <SubmitButton onClick={this.handleClick}>
                         Preview Submission
                     </SubmitButton>
@@ -272,10 +285,7 @@ class Post extends Component {
 
 function mapStateToProps(state) {
     return {
-        userInfo: state.userInfo,
-        previewKeyboard: state.previewKeyboard,
-        showPreviewKeyboard: state.showPreviewKeyboard,
-        keyboards: state.keyboards
+        state
     }
 }
 

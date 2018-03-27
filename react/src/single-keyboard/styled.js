@@ -1,17 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const SubmitButton = styled.div`
-    background-color: #61ccd2;
+export const Button = styled.div`
     color: white;
     border-radius: 5px;
     text-align: center;
     margin: 1rem 1.5rem 1rem 2.5rem;
     cursor: pointer;
-    color: gray;
-    border: 2px solid #61ccd2;
-    color: white;
     transition: all .2s;
+    
 
     :hover {
         background-color: white;
@@ -20,16 +17,33 @@ export const SubmitButton = styled.div`
     }
 `
 
-export const Info = styled.div`
-    margin-left: 2.5rem;
+export const SubmitButton = Button.extend`
+    border: 2px solid #ff7272;;
+    color: white;
+    background-color: #ff7272;
+
+    :hover {
+        background-color: white;
+        color: #61ccd2;
+        transition: all .2s;
+    }
 `
 
-export const Change = styled.div`
-    font-size: 1.2rem;
-    color: rgb(34.4%, 33%, 83.9%);
-    display: inline;
-    margin-right: 1rem;
-    cursor: pointer;
+export const ChangeButton = Button.extend`
+    background-color: #61ccd2;
+    border: 2px solid #61ccd2;
+    color: white;
+
+    :hover {
+        background-color: white;
+        color: #61ccd2;
+        transition: all .2s;
+    }
+
+`
+
+export const Info = styled.div`
+    margin-left: 2.5rem;
 `
 
 export const imgs = [

@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {postKeyboard} from '../actions'
 import styled from 'styled-components'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
@@ -9,7 +11,7 @@ import {SingleKeyboardContainer} from './single-keyboard-container'
 import Images from './images'
 import NoImages from './no-images'
 
-import {SubmitButton, Info, Change, imgs, InfoContainer, Header} from './styled'
+import {SubmitButton, ChangeButton, Info, Change, imgs, InfoContainer, Header} from './styled'
 import {renderForSale} from './render-for-sale'
 
 
@@ -60,6 +62,7 @@ class SingleKeyboard extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextState) {
+        console.log(nextProps)
         const keyboardId = this.props.match.params.param
 
         // If we're rendering a single component and not a preview for submission, make a request for a keyboard with id matching param
@@ -147,24 +150,23 @@ class SingleKeyboard extends Component {
 
     renderInfoItem = (label, key) => {
         const keyboard = this.state.keyboard
-        
+
         return (
             <div>
-                <Change>(Change)</Change>
-                <strong>{label}: </strong>{keyboard[key]}
+                <strong>{label}: </strong>{keyboard[key] || 'None listed'}
             </div>
         )
     }
+
+    changeKeyboard = () => {this.props.postKeyboard(true)}
 
     render() {
         
         const keyboard = this.state.keyboard
         const param = this.props.match.params.param
 
-        console.log(keyboard)
-
         if (!keyboard.user) return null
-
+        
         return (
             <div style={{textAlign: 'center', marginTop: '3rem'}}>
                 <SingleKeyboardContainer>
@@ -172,18 +174,20 @@ class SingleKeyboard extends Component {
                     {this.renderMsgModal()}
                     <InfoContainer>
                         <Header>
-                            <h3>Keyboard Name</h3>
+                            <h3>{keyboard.name}</h3>
                             <h5><Link target='_blank' to={`/user/${keyboard.user._id}`}>{keyboard.user.username}</Link></h5>
                         </Header>
                         {keyboard.imgs.length > 0 ? this.renderImages() : <NoImages/>}
                         <Info>
                             {renderForSale(keyboard, param)}
+                            {this.renderInfoItem('Size', 'size')}                            
                             {this.renderInfoItem('Layout', 'layout')}
                             {this.renderInfoItem('Switches', 'switches')}
                             {this.renderInfoItem('Keycaps', 'keycaps')}
                             {this.renderInfoItem('Condition', 'condition')}
                         </Info>
-                        {param === 'preview' ? <SubmitButton onClick={this.submitKeyboard}>Submit</SubmitButton> : null}
+                        {param === 'preview' ? <ChangeButton submit onClick={this.changeKeyboard}>Change</ChangeButton> : null}                        
+                        {param === 'preview' ? <SubmitButton change onClick={this.submitKeyboard}>Submit</SubmitButton> : null}
                     </InfoContainer>
                 </SingleKeyboardContainer>
             </div>
@@ -197,4 +201,9 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(SingleKeyboard)
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({postKeyboard}, dispatch)
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleKeyboard)

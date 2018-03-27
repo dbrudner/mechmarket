@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import styled from 'styled-components'
 
 const Arrows = styled.div`
@@ -53,7 +53,7 @@ const Delete = styled.div`
         font-size: 1.2rem;
         margin: 1rem auto;
         display: inline-block;
-        color: #8c8c8c;        
+        color: #8c8c8c;
 
         :hover {
             color: #9696ff;
@@ -66,49 +66,70 @@ const Delete = styled.div`
             font-size: 1.6rem;
         }
     }
-    
+
 `
 
-export default function Images(props) {
-
-    console.log(props.noModal)
-
-    const handleClick = () => {
-        if (props.noModal) {
-            props.openModal()
+export default class Images extends Component {
+    
+    constructor(props) {
+        super(props)
+        this.state = {
+            imgs: this.props.imgs,
+            currentImage: this.props.currentImage
         }
     }
 
-    return (
-        <ImagesContainer>
-            <Arrows>
-                <div onClick={() => props.showPreviousImage()}>
-                    <i className="icon fas fa-arrow-left"></i>
-                </div>
-                <div>
-                    {props.currentImage + 1}/{props.imgs.length}
-                </div>
-                <div onClick={() => props.showNextImage()}>
-                    <i className="icon fas fa-arrow-right"></i>
-                </div>
-            </Arrows>
-            
-            <ImgContainer>
-                <img onClick={handleClick} src={props.imgs[props.showImg]} />
-            </ImgContainer>
-            {props.noModal 
-            ? 
-            <Delete>
-                <div onClick={props.deleteImg}>
-                    Delete Picture 
-                    <span><i className="fas fa-trash-alt"></i></span>
-                </div>
-            </Delete>
-            : <Helper>Click to Enlarge</Helper>
-            
-        }
-            
-        </ImagesContainer>
-    )
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            imgs: nextProps.imgs,
+            currentImage: nextProps.currentImage
+        })
+    }
+
+    handleClick = () => {
+        if (this.props.noModal) return;
+        this.props.openModal()
+    }
+
+    deleteImg = () => {
+        this.setState({currentImage: 0})        
+    }
+
+    render() {
+        console.log(this.state.currentImage)
+        return (
+            <ImagesContainer>
+                <Arrows>
+                    <div onClick={() => this.props.showPreviousImage()}>
+                        <i className="icon fas fa-arrow-left"></i>
+                    </div>
+                    <div>
+                        {this.state.currentImage + 1}/{this.state.imgs.length}
+                    </div>
+                    <div onClick={() => this.props.showNextImage()}>
+                        <i className="icon fas fa-arrow-right"></i>
+                    </div>
+                </Arrows>
     
+                <ImgContainer>
+                    <img onClick={this.handleClick} src={this.state.imgs[this.state.currentImage]} />
+                </ImgContainer>
+                {this.props.post
+                ?
+                <Delete>
+                    <div onClick={this.deleteImg}>
+                        Delete Picture
+                        <span><i className="fas fa-trash-alt"></i></span>
+                    </div>
+                </Delete>
+                : <Helper>Click to Enlarge</Helper>
+    
+            }
+    
+            </ImagesContainer>
+        )
+    }
+
+    
+
 }
