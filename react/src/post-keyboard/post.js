@@ -38,7 +38,8 @@ class Post extends Component {
             addImageModal: false,
             imgUrl: '',
             previewImg: '',
-            showImage: 0
+            showImage: 0,
+            imgLoadSucess: null
         }
     }
 
@@ -156,7 +157,6 @@ class Post extends Component {
         // Function to check if input contains an image tag
         const checkURL = url => {return url.match(/\.(jpeg|jpg|gif|png)$/)};
 
-
         event.preventDefault()
 
 
@@ -185,8 +185,8 @@ class Post extends Component {
                         <input value={this.state.imgUrl} onChange={event => this.setState({imgUrl: event.target.value})}/>
                         <button>Preview Image</button>
                     </form>
-                    {this.state.previewImg ? <ImgPreview img={this.state.previewImg} /> : null}
-                    {this.state.previewImg ? <AddImgButton addImg={this.addImage}/> : null}
+                    {this.state.previewImg ? <ImgPreview img={this.state.previewImg} imgLoadSuccess={this.imgLoadSuccess}/> : null}
+                    {this.state.previewImg && this.state.imgLoadSucess ? <AddImgButton addImg={this.addImage}/> : null}
                 </ImageModal>
             </Modal>
         )
@@ -222,6 +222,10 @@ class Post extends Component {
             showImg: 0,
             keyboard: {...this.state.keyboard, imgs}
         })
+    }
+
+    imgLoadSuccess = boolean => {
+        this.setState({imgLoadSucess: boolean})
     }
 
     render() {
