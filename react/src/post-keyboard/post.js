@@ -216,7 +216,6 @@ class Post extends Component {
         if (removeIndex === imgs.length - 1) {
             imgs = this.state.keyboard.imgs.slice(0, imgs.length - 1)
             return this.setState({
-                showImg: 0,
                 keyboard: {...this.state.keyboard, imgs}
             })
         }
@@ -226,7 +225,8 @@ class Post extends Component {
                 return img
             } else return
         })
-        
+
+
         this.setState({
             showImg: 0,
             keyboard: {...this.state.keyboard, imgs}
@@ -234,7 +234,7 @@ class Post extends Component {
     }
 
     imgLoadSuccess = boolean => {
-        if (!boolean) return this.setState({imgLoadSucess: boolean, imgUrl: ''})        
+        if (!boolean) return this.setState({imgLoadSucess: boolean, imgUrl: ''})
         else this.setState({imgLoadSucess: boolean})
     }
 
@@ -248,7 +248,7 @@ class Post extends Component {
             <PostContainer>
                 {this.renderImageModal()}
                 {this.renderSingleImgModal()}
-                
+
                 <Header>
                     Share/Sell a keyboard
                 </Header>
@@ -260,8 +260,8 @@ class Post extends Component {
                     {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
                     {this.renderDatalist('Switches', 'switches', this.state.switches)}
                     <ImagesContainer>
-                        {this.state.keyboard.imgs.length > 0 
-                            ? <Images 
+                        {this.state.keyboard.imgs.length > 0
+                            ? <Images
                                 showPreviousImage={this.showPreviousImage}
                                 showNextImage={this.showNextImage}
                                 imgs={this.state.keyboard.imgs}
@@ -270,7 +270,7 @@ class Post extends Component {
                                 deleteImg={this.deleteImg}
                                 openModal={() => this.openSingleImageModal(true)}
                                 post
-                            /> 
+                            />
                             : <NoImages/>}
                     </ImagesContainer>
                     <AddImageButton onClick={this.addImageClick}> {!this.state.keyboard.imgs.length ? 'Add Image' : 'Add Another Image'} </AddImageButton>

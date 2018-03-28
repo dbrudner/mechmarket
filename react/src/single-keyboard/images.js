@@ -70,7 +70,7 @@ const Delete = styled.div`
 `
 
 export default class Images extends Component {
-    
+
     constructor(props) {
         super(props)
         this.state = {
@@ -92,11 +92,13 @@ export default class Images extends Component {
     }
 
     deleteImg = () => {
-        this.setState({currentImage: 0})        
+        if (this.state.imgs.length - 1 === this.state.currentImage) {
+            this.props.showPreviousImage()
+        }
+        this.props.deleteImg()        
     }
 
     render() {
-        console.log(this.state.currentImage)
         return (
             <ImagesContainer>
                 <Arrows>
@@ -110,9 +112,9 @@ export default class Images extends Component {
                         <i className="icon fas fa-arrow-right"></i>
                     </div>
                 </Arrows>
-    
+
                 <ImgContainer>
-                    <img onClick={this.handleClick} src={this.state.imgs[this.state.currentImage]} />
+                    <img onClick={this.handleClick} src={this.props.imgs[this.props.currentImage]} />
                 </ImgContainer>
                 {this.props.post
                 ?
@@ -123,13 +125,13 @@ export default class Images extends Component {
                     </div>
                 </Delete>
                 : <Helper>Click to Enlarge</Helper>
-    
+
             }
-    
+
             </ImagesContainer>
         )
     }
 
-    
+
 
 }
