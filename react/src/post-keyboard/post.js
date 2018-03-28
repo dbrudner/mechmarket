@@ -183,7 +183,7 @@ class Post extends Component {
                         <input value={this.state.imgUrl} onChange={event => this.setState({imgUrl: event.target.value})}/>
                         <button>Preview Image</button>
                     </form>
-                    {this.state.previewImg ? <ImgPreview img={this.state.previewImg} imgLoadSuccess={this.imgLoadSuccess}/> : null}
+                    {this.state.previewImg ? <ImgPreview load img={this.state.previewImg} imgLoadSuccess={this.imgLoadSuccess}/> : null}
                     {this.state.previewImg && this.state.imgLoadSucess ? <AddImgButton addImg={this.addImage}/> : null}
                 </ImageModal>
             </Modal>

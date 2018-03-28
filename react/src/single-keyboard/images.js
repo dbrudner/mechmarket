@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
+import imagefail from '../images/imagefail.jpg'
 
 const Arrows = styled.div`
 
@@ -114,7 +115,7 @@ export default class Images extends Component {
                 </Arrows>
 
                 <ImgContainer>
-                    <img onClick={this.handleClick} src={this.props.imgs[this.props.currentImage]} />
+                    <img onError={e => e.target.src=imagefail} onClick={this.handleClick} src={this.props.imgs[this.props.currentImage]} />
                 </ImgContainer>
                 {this.props.post
                 ?

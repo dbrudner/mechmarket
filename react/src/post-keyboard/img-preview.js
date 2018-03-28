@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
+import imagefail from '../images/imagefail.jpg'
 
 const ImgContainer = styled.div`
     position: relative;
@@ -23,33 +24,29 @@ export default class ImgPreview extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {imgLoad: true}
+        this.state = {
+            imgLoad: true,
+        }
     }
 
-    handleError = () => {
+    componentDidMount() {
+        console.log('hi')
+        this.setState({imgLoad: true})
+    }
 
+    handleError = e => {
         this.setState({imgLoad: false})
-
         this.props.imgLoadSuccess(false)
-    }
-
-    handleSuccess = () => {
-        this.props.imgLoadSuccess(true)
+        e.target.src=imagefail
     }
 
     render() {
-
-        if (this.state.imgLoad) {
-            return (
-                <ImgContainer>
-                    <img onLoad={this.handleSuccess} onError={this.handleError} src={this.props.img} />
-                </ImgContainer>
-            )
-        } else {
-            return <div>Image not found</div>
-        }
-
-
+        return (
+            <ImgContainer>
+                <img onLoad={this.props.imgLoadSuccess} onError={this.handleError} src={this.props.img} />
+            </ImgContainer>
+        )
+        
     }
 
 
