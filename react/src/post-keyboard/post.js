@@ -16,6 +16,7 @@ import AddImgButton from './add-img-button'
 
 import Images from '../single-keyboard/images'
 import NoImages from '../single-keyboard/no-images'
+import imagefail from '../images/imagefail.jpg'
 
 class Post extends Component {
     constructor(props) {
@@ -169,7 +170,7 @@ class Post extends Component {
         const keyboard = this.state.keyboard
         return (
             <Modal open={this.state.openSingleImageModal} onClose={() => this.openSingleImageModal(false)} >
-                <img src={keyboard.imgs[this.state.showImage]} style={{width: '100%'}}/>
+                <img onError={e => e.target.src=imagefail} src={keyboard.imgs[this.state.showImage]} style={{width: '100%'}}/>
             </Modal>
         )
     }
@@ -183,7 +184,7 @@ class Post extends Component {
                         <input value={this.state.imgUrl} onChange={event => this.setState({imgUrl: event.target.value})}/>
                         <button>Preview Image</button>
                     </form>
-                    {this.state.previewImg ? <ImgPreview load img={this.state.previewImg} imgLoadSuccess={this.imgLoadSuccess}/> : null}
+                    {this.state.previewImg ? <ImgPreview img={this.state.previewImg} imgLoadSuccess={this.imgLoadSuccess}/> : null}
                     {this.state.previewImg && this.state.imgLoadSucess ? <AddImgButton addImg={this.addImage}/> : null}
                 </ImageModal>
             </Modal>
