@@ -5,8 +5,18 @@ import axios from 'axios'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import { Login, openSignUp } from '../actions/index';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
-const FormContainer = styled.div``
+const FormContainer = styled.div`
+    padding: 2rem;
+    h1 {
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1rem;
+
+    }
+`
 
 const Label = styled.span`
     margin-right: 3rem;
@@ -25,7 +35,7 @@ class Form extends Component {
                 username: '',
                 password: '',
                 password_confirm: '',
-                
+
             },
             error: null,
             redirectTo: null
@@ -38,17 +48,21 @@ class Form extends Component {
 
         return (
             <div>
-                <Label>
-                    {label}
-                </Label>
-                <input key={name} value={this.state.user[name]} type='text' onChange={event => this.handleChange(name, event.target.value)} />
+                <TextField
+                    hintText={name.replace('_', ' ')}
+                    onChange={event => this.handleChange(name, event.target.value)}
+                />
             </div>
         )
     }
 
     renderAllInputs = () => {
         return Object.keys(this.state.user).map(item => {
-            return <div key={item}>{this.renderInput(item)}</div>
+            return (
+                <div key={item}>
+                    {this.renderInput(item)}
+                </div>
+            )
         })
     }
 
@@ -56,7 +70,7 @@ class Form extends Component {
 
     handleSubmit = event => {
         event.preventDefault()
-        if (this.state.password === this.state.password_confirm) {
+        if (this.state.password !== this.state.password_confirm) {
             return this.setState({error: "Passwords don't match"})
         }
 
@@ -82,12 +96,19 @@ class Form extends Component {
     render() {
         return (
             <FormContainer>
+                <h1>Sign Up</h1>
                 <form onSubmit={this.handleSubmit}>
                     {this.renderAllInputs()}
                     <div>
                         {this.state.error || null}
                     </div>
-                    <SubmitButton>Submit</SubmitButton>
+                    <div style={{textAlign: 'center', marginTop: '2rem'}}>
+                        <RaisedButton
+                            label="Sign Up"
+                            primary
+                            type='submit'
+                        />
+                    </div>
                 </form>
             </FormContainer>
         )

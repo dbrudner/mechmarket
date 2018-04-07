@@ -7,6 +7,7 @@ import { Login, openSignUp } from '../actions/index';
 import {Link} from 'react-router-dom'
 
 import SignupButton from './signup-button'
+import RaisedButton from 'material-ui/RaisedButton';
 
 const SignupButtonContainer = styled.div`
     display: inline-block;
@@ -69,10 +70,20 @@ class LoginOrRegister extends Component {
                     {this.state.loginFail ? <span>Wrong username or password</span> : null}
                     <input value={this.state.username} type='text' onChange={event => {this.handleChange('username', event.target.value)}}/>
                     <input value={this.state.password} type='password' onChange={event => {this.handleChange('password', event.target.value)}}/>
-                    <button type='submit'>Login</button>
+                    <RaisedButton 
+                        default
+                        type='submit'
+                        label='Login'
+                        style={{margin: '1rem'}}
+                    />
                 </Form>
                 <SignupButtonContainer>
-                    <button onClick={this.signUp}> Sign up </button>
+                    <RaisedButton 
+                        onClick={this.signUp}
+                        primary
+                        label='Sign Up'
+                        style={{margin: '1rem'}}
+                    />
                 </SignupButtonContainer>
             </div>
         )
