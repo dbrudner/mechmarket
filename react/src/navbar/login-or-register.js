@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import { Login, openSignUp } from '../actions/index';
+import { Login, openSignUp, openLogin } from '../actions/index';
 import {Link} from 'react-router-dom'
 
 import SignupButton from './signup-button'
@@ -62,29 +62,26 @@ class LoginOrRegister extends Component {
         this.props.openSignUp(true)
     }
 
+    login = () => {
+        this.props.openLogin(true)
+    }
+
     render() {
-        
+        console.log(this.props);
         return (
             <div>
-                <Form onSubmit={this.handleSubmit}>
-                    {this.state.loginFail ? <span>Wrong username or password</span> : null}
-                    <input value={this.state.username} type='text' onChange={event => {this.handleChange('username', event.target.value)}}/>
-                    <input value={this.state.password} type='password' onChange={event => {this.handleChange('password', event.target.value)}}/>
-                    <RaisedButton 
-                        default
-                        type='submit'
-                        label='Login'
-                        style={{margin: '1rem'}}
-                    />
-                </Form>
-                <SignupButtonContainer>
-                    <RaisedButton 
-                        onClick={this.signUp}
-                        primary
-                        label='Sign Up'
-                        style={{margin: '1rem'}}
-                    />
-                </SignupButtonContainer>
+                <RaisedButton 
+                    onClick={this.login}
+                    default
+                    label='Log In'
+                    style={{margin: '1rem'}}
+                />
+                <RaisedButton 
+                    onClick={this.signUp}
+                    primary
+                    label='Sign Up'
+                    style={{margin: '1rem'}}
+                />
             </div>
         )
     }
@@ -97,7 +94,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({Login: Login, openSignUp: openSignUp}, dispatch)
+    return bindActionCreators({Login, openSignUp, openLogin}, dispatch)
 }
 
 

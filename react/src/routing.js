@@ -13,6 +13,7 @@ import PostKeyboardModal from './post-keyboard/post-keyboard-modal'
 import SearchKeyboard from './search-keyboard/search-keyboard'
 import Home from './home/home'
 import Signup from './signup/signup'
+import Login from './login/login'
 import SingleKeyboard from './single-keyboard/single-keyboard'
 
 class App extends Component {
@@ -30,6 +31,10 @@ class App extends Component {
         this.props.openSignUp(false)
     }
 
+    closeLoginModal = () => {
+        this.props.openLogin(false)        
+    }
+
     render() {
 
 		return (
@@ -39,6 +44,7 @@ class App extends Component {
                     {/* When signup is true in app state, shows sign up modal */}
 
                     {this.props.state.openSignUp ? <Signup closeModal={this.closeSignupModal}/> : null}
+                    {this.props.state.openLogin ? <Login closeModal={this.closeLoginModal}/> : null}                    
                     {this.props.state.postKeyboard ? <PostKeyboardModal closeModal={this.closeSignupModal}/> : null}
                     {/* {this.props.state.showPreviewKeyboard ? <SingleKeyboard preview/> : null} */}
                     <Route exact path='/:param' component={SingleKeyboard} />

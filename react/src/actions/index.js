@@ -30,6 +30,13 @@ export function openSignUp(boolean) {
     }
 }
 
+export function openLogin(boolean) {
+    return {
+        type: types.OPEN_LOGIN,
+        payload: boolean
+    }
+}
+
 export function postKeyboard(boolean) {
     return {
         type: types.POST_KEYBOARD,
@@ -50,3 +57,4 @@ export function showPreviewKeyboard(boolean) {
         payload: boolean
     }
 }
+

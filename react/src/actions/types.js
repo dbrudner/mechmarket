@@ -6,6 +6,8 @@ export const GET_KEYBOARDS = 'GET_KEYBOARDS'
 
 export const SIGNUP = 'SIGNUP'
 
+export const OPEN_LOGIN = 'OPEN_LOGIN'
+
 export const POST_KEYBOARD = 'POST_KEYBOARD'
 
 export const PREVIEW_KEYBOARD = 'PREVIEW_KEYBOARD'
