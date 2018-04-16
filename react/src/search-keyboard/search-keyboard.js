@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import KeyboardList from './keyboard-list'
 
 class SearchKeyboard extends Component {
     constructor(props) {
@@ -11,12 +12,16 @@ class SearchKeyboard extends Component {
     }
 
     render() {
-        console.log(this.props)
-        return (
-            <div>
-                keyboards
-            </div>
-        )
+        if (this.props.state.keyboards) {
+            return (
+                <div>
+                    <KeyboardList keyboards={this.props.state.keyboards} />
+                </div>
+            )
+        } else {
+            return <div></div>
+        }
+        
     }
 }
 
