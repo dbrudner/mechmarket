@@ -62,7 +62,6 @@ class SingleKeyboard extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-        console.log(nextProps)
         const keyboardId = this.props.match.params.param
 
         // If we're rendering a single component and not a preview for submission, make a request for a keyboard with id matching param

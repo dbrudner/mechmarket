@@ -16,15 +16,13 @@ export default class KeyboardListItem extends Component {
         }
     }
 
+    
+
     render() {
         return (
             <div>
-                <div>
-                    <img src={this.state.currentImg} />
-                </div>
-                <div>
-                    {this.props.keyboard.name}
-                </div>
+                <img src={this.state.currentImg} />
+                {this.props.keyboard.name}
             </div>
         )
     }

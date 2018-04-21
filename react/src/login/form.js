@@ -48,7 +48,7 @@ class Form extends Component {
         return (
             <div>
                 <TextField
-                    hintText={name.replace('_', ' ')}
+                    hintText={label}
                     onChange={event => this.handleChange(name, event.target.value)}
                 />
             </div>
@@ -99,7 +99,7 @@ class Form extends Component {
                     </div>
                     <div style={{textAlign: 'center', marginTop: '2rem'}}>
                         <RaisedButton
-                            label="Sign Up"
+                            label="Submit"
                             primary
                             type='submit'
                         />

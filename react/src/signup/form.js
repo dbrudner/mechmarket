@@ -34,7 +34,7 @@ class Form extends Component {
             user: {
                 username: '',
                 password: '',
-                password_confirm: '',
+                password_Confirm: '',
 
             },
             error: null,
@@ -49,7 +49,7 @@ class Form extends Component {
         return (
             <div>
                 <TextField
-                    hintText={name.replace('_', ' ')}
+                    hintText={label}
                     onChange={event => this.handleChange(name, event.target.value)}
                 />
             </div>
