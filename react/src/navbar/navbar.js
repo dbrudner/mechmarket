@@ -6,33 +6,51 @@ import {bindActionCreators} from 'redux'
 import { Login, logout, postKeyboard } from '../actions';
 import LoginOrRegister from './login-or-register'
 import UserInfo from './user-info'
+import {Link} from 'react-router-dom'
 
 const NavbarContainer = styled.div`
-    background-color: rgb(80%, 53.4%, 53.4%);
     width: 100%;
     display: flex;
     justify-content: space-between;
     font-size: 2rem;
+    border-bottom: 3px solid black;
+    background-color: gray;    
 `
 
 const Brand = styled.div`
     display: inline-block;
+    padding: 1rem 1rem 1.3rem 1rem;
+    background-color: white;
+    font-style: italic;
 `
 
 const NavLinks = styled.div`
     display: inline-block;
+    color: white;
+    margin-left: 2rem;
 
     ul {
         display: inline-block;
         margin: 0;
         padding: 0;
 
-        li {
+        li, a {
             display: inline-block;
             margin-left: 2rem;
+            cursor: pointer;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            transition: all .3s;
+            color: white;
+            text-decoration: none;
 
             &:first-child {
                 margin-left: 0;
+            }
+
+            &:hover {
+                transform: translateY(-.5rem);
+                transition: all .3s;
             }
         }
     }
@@ -103,16 +121,17 @@ class Navbar extends Component {
     render() {
         return (
             <NavbarContainer>
-                <Brand>
-                    Mechanical Keyboard Classifieds
-                </Brand>
-                <NavLinks>
-                    <ul>
-                        <li>Keyboards</li>
-                        <li>Parts</li>
-                        <li onClick={this.postKeyboard}>Post new keyboard</li>
-                    </ul>
-                </NavLinks>
+                <div>
+                    <Brand>
+                        Mechanical Keyboard Classifieds
+                    </Brand>
+                    <NavLinks>
+                        <ul>
+                            <li><Link to='/keyboards'>View Keyboards</Link></li>
+                            <li onClick={this.postKeyboard}>Post</li>
+                        </ul>
+                    </NavLinks>
+                </div>
                 <UserContainer>
                     {this.renderInfoOrLogin()}
                 </UserContainer>

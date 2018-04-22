@@ -36,14 +36,28 @@ export default class KeyboardList extends Component {
     }
 
     nextImg = () => {
-        this.setState({
-            imgPreview: this.state.imgPreview + 1
-        })
+
+        if (this.state.imgPreview + 1 >= this.state.previewKeyboard.imgs.length) {
+            this.setState({imgPreview: 0})
+        } else {
+            this.setState({
+                imgPreview: this.state.imgPreview + 1
+            })
+        }
+    }
+
+    prevImg = () => {
+
+        if (this.state.imgPreview - 1 < 0) {
+            this.setState({imgPreview: this.state.previewKeyboard.imgs.length - 1})
+        } else {
+            this.setState({
+                imgPreview: this.state.imgPreview - 1
+            })
+        }
     }
 
     render() {
-        console.log(this.state.imgPreview)
-
         const renderKeyboardList = keyboards => {
             return Object.keys(keyboards).map((keyboard) => {
                 return (
@@ -71,7 +85,8 @@ export default class KeyboardList extends Component {
                         <div>
                             <img style={{width: '350px'}} src={this.state.previewKeyboard.imgs[this.state.imgPreview]} />
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div onClick={this.prevImg}>Prev</div>                            
+                                <div onClick={this.prevImg}>Prev</div>
+                                <div>{this.state.imgPreview + 1}/{this.state.previewKeyboard.imgs.length}</div>
                                 <div onClick={this.nextImg}>Next</div>
                             </div>
                         </div>

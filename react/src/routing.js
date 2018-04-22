@@ -50,6 +50,7 @@ class App extends Component {
                     <Route exact path='/:param' component={SingleKeyboard} />
                     <Route exact path='/keyboards' component={SearchKeyboard} />
                     <Route exact path='/keyboard/:param' component={SingleKeyboard} />
+                    <Route exact path='/' component={Home} />                    
                 </div>
             </Router>
 		);
