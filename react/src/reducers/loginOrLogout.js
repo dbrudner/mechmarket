@@ -1,4 +1,4 @@
-export default function(state = null, action) {
+export default function(state = {userInfo: {username: "1"}}, action) {
     switch (action.type) {
         case 'LOGIN':
             return action.payload;

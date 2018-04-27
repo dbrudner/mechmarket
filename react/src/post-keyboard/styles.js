@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 
 export const PostContainer = styled.div`
-    font-size: 2rem;
-    padding: 3rem 10rem;
 `
 
 export const Label = styled.span`

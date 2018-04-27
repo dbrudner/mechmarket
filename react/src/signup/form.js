@@ -8,13 +8,33 @@ import { Login, openSignUp } from '../actions/index';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
+
+const Error = styled.div`
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: red;
+    text-align: center;
+`
+
 const FormContainer = styled.div`
     padding: 2rem;
+
+    form {
+        padding: 2rem;
+    }
+
     h1 {
         text-align: center;
         text-transform: uppercase;
         letter-spacing: 1rem;
+        margin-top: 0;
+    }
 
+    p {
+        font-size: 1.4rem;
+        font-style: italic;
+        text-align: center;
+        margin-top: 3rem;
     }
 `
 
@@ -34,7 +54,7 @@ class Form extends Component {
             user: {
                 username: '',
                 password: '',
-                password_Confirm: '',
+                confirm_Password: '',
 
             },
             error: null,
@@ -46,11 +66,18 @@ class Form extends Component {
         let label = name.charAt(0).toUpperCase() + name.substr(1)
         label = label.replace('_', ' ')
 
+        let type = 'username'
+
+        if (name.toLowerCase().match('password')) {
+            type = 'password'
+        }
+
         return (
             <div>
                 <TextField
                     hintText={label}
                     onChange={event => this.handleChange(name, event.target.value)}
+                    type={type}
                 />
             </div>
         )
@@ -70,15 +97,16 @@ class Form extends Component {
 
     handleSubmit = event => {
         event.preventDefault()
-        if (this.state.password !== this.state.password_confirm) {
+        const user = this.state.user
+        
+
+        if (user.password !== user.confirm_Password) {
             return this.setState({error: "Passwords don't match"})
         }
 
-        const user = this.state.user
 
         axios.post('/signup', user)
         .then(res => {
-            console.log('sign up success')
             axios.get('/test')
             .then(res => {
                 this.props.Login(res.data)
@@ -96,19 +124,21 @@ class Form extends Component {
     render() {
         return (
             <FormContainer>
-                <h1>Sign Up</h1>
+                <h1>Sign Up <i className="fas fa-user-plus"></i></h1>
                 <form onSubmit={this.handleSubmit}>
+                    
                     {this.renderAllInputs()}
-                    <div>
-                        {this.state.error || null}
-                    </div>
                     <div style={{textAlign: 'center', marginTop: '2rem'}}>
-                        <RaisedButton
-                            label="Sign Up"
-                            primary
-                            type='submit'
-                        />
+                    <Error>
+                        {this.state.error || null}
+                    </Error>
+                    <RaisedButton
+                        label="Sign Up"
+                        primary
+                        type='submit'
+                    />
                     </div>
+                    <p>Registered already? Click <a href="#">here</a> to sign in</p>
                 </form>
             </FormContainer>
         )

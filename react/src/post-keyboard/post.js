@@ -8,6 +8,12 @@ import {bindActionCreators} from 'redux'
 import {previewKeyboard, showPreviewKeyboard} from '../actions'
 import Modal from 'react-responsive-modal'
 
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import AutoComplete from 'material-ui/AutoComplete';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+
 import {sizes, layouts, conditions} from './select-arrays'
 import {PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer} from './styles'
 
@@ -17,6 +23,11 @@ import AddImgButton from './add-img-button'
 import Images from '../single-keyboard/images'
 import NoImages from '../single-keyboard/no-images'
 import imagefail from '../images/imagefail.jpg'
+
+const FormRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+`
 
 class Post extends Component {
     constructor(props) {
@@ -64,51 +75,58 @@ class Post extends Component {
     renderInput = (label, key, options) => {
         return (
             <div>
-                <Label>
-                    {label}
-                </Label>
-                <input key={key} value={this.state.keyboard[key]} type='text' onChange={event => this.handleChange(key, event.target.value)} />
+                <TextField
+                    hintText={label}
+                    floatingLabelText={label}
+                    onChange={event => this.handleChange(key, event.target.value)}
+                    value={this.state.keyboard[key]}
+                />
             </div>
         )
     }
 
     renderSelect = (label, key, options) => {
 
-        const renderOptions = options => {
+        const renderMenuItems = options => {
             return options.map(option => {
-                return <option value={option} key={option}>{option}</option>
+                return <MenuItem value={option} key={option} primaryText={option} />
             })
         }
+
         return (
-            <div>
-                <Label>
-                    {label}
-                </Label>
-                <select>
-                    <option value={null}>{label}</option>
-                    {renderOptions(options)}
-                </select>
-            </div>
+                <SelectField
+                    floatingLabelText="Frequency"
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                >
+                    {renderMenuItems(options)}
+                </SelectField>
         )
     }
 
-    renderDatalist = (label, key, options) => {
+    handleUpdateInput = (value) => {
+        this.setState({
+            dataSource: [
+                value,
+                value + value,
+                value + value + value,
+            ],
+        });
+    };
 
-        const renderOptions = options => {
-            return options.map(option => {
-                return <option value={option} key={option}/>
-            })
-        }
+
+    renderDatalist = (label, key, options) => {
 
         return (
             <div>
-                <Label>
-                    {label}
-                </Label>
-                <input list={key} value={this.state.keyboard[key]} onChange={event => this.handleChange(key, event.target.value)} />
-                <datalist id={key}>
-                    {renderOptions(options)}
-                </datalist>
+                <AutoComplete
+                    hintText={label}
+                    dataSource={options}
+                    onUpdateInput={this.handleUpdateInput}
+                    floatingLabelText={label}
+                    onUpdateInput={this.handleUpdateInput}
+                    value={this.state.keyboard[key]}
+                />
             </div>
         )
     }
@@ -241,6 +259,8 @@ class Post extends Component {
 
     render() {
 
+        console.log(this.props.state);
+
         if (this.state.redirect) {
             return <Redirect to={{ pathname: this.state.redirect}} />
         }
@@ -254,12 +274,16 @@ class Post extends Component {
                     Share/Sell a keyboard
                 </Header>
                 <form>
-                    {this.renderInput('Name', 'name')}
-                    {this.renderSelect('Size', 'size', sizes)}
-                    {this.renderSelect('Layout', 'layout', layouts)}
-                    {this.renderSelect('Condition', 'condition', conditions)}
-                    {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
-                    {this.renderDatalist('Switches', 'switches', this.state.switches)}
+                    <FormRow>
+                        {this.renderInput('Name', 'name')}
+                        {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
+                        {this.renderDatalist('Switches', 'switches', this.state.switches)}
+                    </FormRow>
+                    <FormRow>
+                        {this.renderSelect('Size', 'size', sizes)}
+                        {this.renderSelect('Layout', 'layout', layouts)}
+                        {this.renderSelect('Condition', 'condition', conditions)}
+                    </FormRow>
                     <ImagesContainer>
                         {this.state.keyboard.imgs.length > 0
                             ? <Images

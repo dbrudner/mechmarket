@@ -10,11 +10,23 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const FormContainer = styled.div`
     padding: 2rem;
+
+    form {
+        padding: 2rem;
+    }
+
     h1 {
         text-align: center;
         text-transform: uppercase;
         letter-spacing: 1rem;
+        margin-top: 0;
+    }
 
+    p {
+        font-size: 1.4rem;
+        font-style: italic;
+        text-align: center;
+        margin-top: 3rem;
     }
 `
 
@@ -22,8 +34,12 @@ const Label = styled.span`
     margin-right: 3rem;
 `
 
-const SubmitButton = styled.button``
-
+const Error = styled.div`
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: red;
+    text-align: center;
+`
 
 class Form extends Component {
 
@@ -45,11 +61,20 @@ class Form extends Component {
         let label = name.charAt(0).toUpperCase() + name.substr(1)
         label = label.replace('_', ' ')
 
+        let type = 'username'
+
+        if (name.toLowerCase().match('password')) {
+            type = 'password'
+        }
+
         return (
             <div>
                 <TextField
                     hintText={label}
+                    floatingLabelText={label}                    
                     onChange={event => this.handleChange(name, event.target.value)}
+                    type={type}
+                    ref={type}
                 />
             </div>
         )
@@ -83,6 +108,8 @@ class Form extends Component {
         }).catch (err => {
             this.setState({
                 error: 'Wrong username or password'
+            }, () => {
+                console.log(this.refs.username);
             })
             throw err
         })
@@ -91,19 +118,20 @@ class Form extends Component {
     render() {
         return (
             <FormContainer>
-                <h1>Login</h1>
                 <form onSubmit={this.handleSubmit}>
+                    <h1>Login <i className="fas fa-sign-in-alt"></i></h1>                                                                     
                     {this.renderAllInputs()}
-                    <div>
+                    <Error>
                         {this.state.error || null}
-                    </div>
+                    </Error>
                     <div style={{textAlign: 'center', marginTop: '2rem'}}>
                         <RaisedButton
-                            label="Submit"
+                            label="Log In"
                             primary
                             type='submit'
                         />
                     </div>
+                    <p>Not registered? Click <a href="#">here</a> to sign up</p>                    
                 </form>
             </FormContainer>
         )
