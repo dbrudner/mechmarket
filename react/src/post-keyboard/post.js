@@ -13,9 +13,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import AutoComplete from 'material-ui/AutoComplete';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 import {sizes, layouts, conditions} from './select-arrays'
-import {PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer} from './styles'
+import {PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer, Helper} from './styles'
 
 import ImgPreview from './img-preview'
 import AddImgButton from './add-img-button'
@@ -43,7 +44,8 @@ class Post extends Component {
             imgUrl: '',
             previewImg: '',
             showImage: 0,
-            imgLoadSucess: null
+            imgLoadSucess: null,
+            step: 1
         }
     }
 
@@ -80,27 +82,21 @@ class Post extends Component {
                     floatingLabelText={label}
                     onChange={event => this.handleChange(key, event.target.value)}
                     value={this.state.keyboard[key]}
+                    autoFocus
+                    style={{textAlign: "center"}}
                 />
             </div>
         )
     }
 
-    renderSelect = (label, key, options) => {
-
-        const renderMenuItems = options => {
-            return options.map(option => {
-                return <MenuItem value={option} key={option} primaryText={option} />
-            })
-        }
-
+    renderTabList = (label, key, options) => {
         return (
-                <SelectField
-                    floatingLabelText="Frequency"
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                >
-                    {renderMenuItems(options)}
-                </SelectField>
+            <div style={{marginTop: "1rem"}}>
+                <h3>{label}</h3>
+                <Tabs>
+                    {options.map(option => <Tab label={option}></Tab>)}
+                </Tabs>
+            </div>
         )
     }
 
@@ -126,6 +122,7 @@ class Post extends Component {
                     floatingLabelText={label}
                     onUpdateInput={this.handleUpdateInput}
                     value={this.state.keyboard[key]}
+                    style={{textAlign: "center"}}
                 />
             </div>
         )
@@ -137,7 +134,7 @@ class Post extends Component {
         })
     }
 
-    handleClick = event => {
+    submitKeyboard = event => {
 
         // Keyboard object with all state input values and userid
         const keyboard = {...this.state.keyboard}
@@ -257,9 +254,37 @@ class Post extends Component {
         else this.setState({imgLoadSucess: boolean})
     }
 
+    nextStep = () => {
+        console.log('next');
+        this.setState({step: this.state.step + 1})
+    }
+
+    step1 = () => {
+        return (
+            <form onSubmit={this.nextStep}>
+                {this.renderInput('Name', 'name')}
+                {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
+                {this.renderDatalist('Switches', 'switches', this.state.switches)}
+                <SubmitButton onClick={this.nextStep} type="submit">Next <i className="fas fa-angle-right"></i></SubmitButton>
+            </form>
+        )
+    }
+
+    step2 = () => {
+        return (
+            <form>
+                {this.renderTabList('Size', 'size', sizes)}
+                {this.renderTabList('Layout', 'layout', layouts)}
+                {this.renderTabList('Condition', 'condition', conditions)}
+                <SubmitButton onClick={this.nextStep} type="submit">Next <i className="fas fa-angle-right"></i></SubmitButton>
+            </form>
+
+        )
+    }
+
     render() {
 
-        console.log(this.props.state);
+        console.log(this.state.step);
 
         if (this.state.redirect) {
             return <Redirect to={{ pathname: this.state.redirect}} />
@@ -267,23 +292,17 @@ class Post extends Component {
 
         return (
             <PostContainer>
-                {this.renderImageModal()}
-                {this.renderSingleImgModal()}
-
+                {/* {this.renderImageModal()}
+                {this.renderSingleImgModal()} */}
                 <Header>
-                    Share/Sell a keyboard
+                    <p>{this.state.step}/3</p>
+                    <h1>Share/Sell a keyboard <i style={{marginLeft: '5px'}} className="far fa-keyboard"></i></h1>
+                    {this.state.step === 1 ? <Helper>Tell us about your keyboard</Helper> : null}
                 </Header>
-                <form>
-                    <FormRow>
-                        {this.renderInput('Name', 'name')}
-                        {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
-                        {this.renderDatalist('Switches', 'switches', this.state.switches)}
-                    </FormRow>
-                    <FormRow>
-                        {this.renderSelect('Size', 'size', sizes)}
-                        {this.renderSelect('Layout', 'layout', layouts)}
-                        {this.renderSelect('Condition', 'condition', conditions)}
-                    </FormRow>
+                    {this.state.step === 1 ? this.step1() : this.state.step === 2 ? this.step2() : null}
+                    {/* {this.renderSelect('Size', 'size', sizes)}
+                    {this.renderSelect('Layout', 'layout', layouts)}
+                    {this.renderSelect('Condition', 'condition', conditions)}
                     <ImagesContainer>
                         {this.state.keyboard.imgs.length > 0
                             ? <Images
@@ -298,11 +317,7 @@ class Post extends Component {
                             />
                             : <NoImages/>}
                     </ImagesContainer>
-                    <AddImageButton onClick={this.addImageClick}> {!this.state.keyboard.imgs.length ? 'Add Image' : 'Add Another Image'} </AddImageButton>
-                    <SubmitButton onClick={this.handleClick}>
-                        Preview Submission
-                    </SubmitButton>
-                </form>
+                    <AddImageButton onClick={this.addImageClick}> {!this.state.keyboard.imgs.length ? 'Add Image' : 'Add Another Image'} </AddImageButton>*/}
             </PostContainer>
         )
     }

@@ -74,7 +74,7 @@ export default class KeyboardList extends Component {
         }
 
         return (
-            <keyboardListContainer>
+            <KeyboardListContainer>
 
                 <Modal
                     open={this.state.openModal}
@@ -104,7 +104,7 @@ export default class KeyboardList extends Component {
                 >
                     {renderKeyboardList(this.props.keyboards)}
                 </GridList>
-            </keyboardListContainer>
+            </KeyboardListContainer>
         )
     }
 }
