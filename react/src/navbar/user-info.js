@@ -1,39 +1,63 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import RaisedButton from 'material-ui/RaisedButton';
 
 
 const UserInfoContainer = styled.div`
 
-    margin-top: 1rem;
+    margin-top: .5rem;
     margin-right: 2rem;
+
+`
+
+const Logout = styled.li`
 
     a {
         margin-right: 3.5rem;
-        color: white;
+        color: ${props => props.theme.color1};
         font-weight: bold;
-        transition: all .3s;        
         display: inline-block;
+        text-decoration: none;
+        padding: 5px 10px;
+    }
 
-        a:hover {
-            transform: translateY(-1rem);
-            transition: all .3s;
-        }
+    a:hover {
+        color: ${props => props.theme.color3};
+    }
+    
+`
+
+const Username = styled.li`
+    a {
+        margin-right: 2rem;
+        text-decoration: none;
+        color: ${props => props.theme.color1};
+    }
+    a:hover {
+        color: ${props => props.theme.color3};        
     }
 `
 
 export default function UserInfo(props) {
     return (
         <UserInfoContainer>
-            <a href="#">{props.userInfo.username}</a>
-            <RaisedButton
-                label="Log Out"
-                primary
-                onClick={props.logout}
-            />
+            <ul>
+                <Username>
+                    <a href="#">{props.userInfo.username}
+                        <span style={{ marginLeft: '10px' }}><i className="fas fa-user-circle"></i></span>
+                    </a>
+                </Username>
+                <Logout onClick={props.logout}>
+                    <a href="#">
+                    Log out 
+                    <span style={{marginLeft: '10px'}}>
+                        <i className="fas fa-sign-out-alt"></i>
+                    </span>
+                    </a>
+                </Logout>
+            </ul>
         </UserInfoContainer>
     )
 }

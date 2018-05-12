@@ -14,9 +14,15 @@ import AutoComplete from 'material-ui/AutoComplete';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import {
+    Step,
+    Stepper,
+    StepLabel,
+  } from 'material-ui/Stepper';
 
 import {sizes, layouts, conditions} from './select-arrays'
-import {PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer, Helper} from './styles'
+import {Help, Step1Header, PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer, Helper, TabHeader, KeyboardType} from './styles'
 
 import ImgPreview from './img-preview'
 import AddImgButton from './add-img-button'
@@ -33,7 +39,6 @@ const FormRow = styled.div`
 class Post extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
             keyboard: {...this.props.state.previewKeyboard, ...this.props.state.userInfo},
             fireRedirect: null,
@@ -45,12 +50,12 @@ class Post extends Component {
             previewImg: '',
             showImage: 0,
             imgLoadSucess: null,
-            step: 1
+            step: 0,
+            type: null
         }
     }
 
     componentDidMount() {
-        console.log(this.state.keyboard)
         const keyboards = this.props.state.keyboards
 
         // Used to get all switches and caps in database to use for datalist autocomplete
@@ -61,7 +66,6 @@ class Post extends Component {
                 }
                 return acc
             }, [])
-
             this.setState({[part]: parts})
         }
 
@@ -70,15 +74,13 @@ class Post extends Component {
 
     }
 
-    handleChange = (id, value) => {
-        this.setState({keyboard: {...this.state.keyboard, [id]: value}})
-    }
+    handleChange = (id, value) => this.setState({keyboard: {...this.state.keyboard, [id]: value}})
 
-    renderInput = (label, key, options) => {
+    renderInput = (label, key, options, helper) => {
         return (
             <div>
                 <TextField
-                    hintText={label}
+                    hintText={`${label} ${helper}`}
                     floatingLabelText={label}
                     onChange={event => this.handleChange(key, event.target.value)}
                     value={this.state.keyboard[key]}
@@ -89,38 +91,36 @@ class Post extends Component {
         )
     }
 
+    moreInfo = key => {
+        console.log(key);
+    }
+
     renderTabList = (label, key, options) => {
         return (
-            <div style={{marginTop: "1rem"}}>
-                <h3>{label}</h3>
-                <Tabs>
-                    {options.map(option => <Tab label={option}></Tab>)}
-                </Tabs>
+            <div style={{marginTop: "2.5rem"}}>
+                <TabHeader>{label}<span onClick={() => this.moreInfo(key)} style={{marginLeft: "5px", color: "#01579B", cursor: "pointer"}}><i className="fas fa-question-circle"></i></span></TabHeader>
+                <RadioButtonGroup name={label} onChange={value => this.handleChange(key, value)}>
+                    {options.map(option => <RadioButton key={option} value={option} label={option}></RadioButton>)}
+                </RadioButtonGroup>
             </div>
         )
     }
 
-    handleUpdateInput = (value) => {
+    handleUpdateInput = (e, datasrc) => {
         this.setState({
-            dataSource: [
-                value,
-                value + value,
-                value + value + value,
-            ],
+            dataSources: {...this.state.dataSources, [datasrc]: e.target.value}
         });
     };
 
 
     renderDatalist = (label, key, options) => {
-
         return (
             <div>
                 <AutoComplete
                     hintText={label}
                     dataSource={options}
-                    onUpdateInput={this.handleUpdateInput}
+                    onUpdateInput={value => this.setState({keyboard: {...this.state.keyboard, [key]: value}})}
                     floatingLabelText={label}
-                    onUpdateInput={this.handleUpdateInput}
                     value={this.state.keyboard[key]}
                     style={{textAlign: "center"}}
                 />
@@ -128,41 +128,35 @@ class Post extends Component {
         )
     }
 
-    renderAllInputs = () => {
-        return Object.keys(this.state.keyboard).map(item => {
-            return <div key={item}>{this.renderInput(item)}</div>
-        })
-    }
-
     submitKeyboard = event => {
 
         // Keyboard object with all state input values and userid
-        const keyboard = {...this.state.keyboard}
+        const {keyboard} = this.state
 
         // Closes Modal
-        this.props.closeModal()
+        this.props.closeModal();
 
         // Puts keyboard into redux store
-        this.props.previewKeyboard(keyboard)
+        this.props.previewKeyboard(keyboard);
 
         // Sets redux store boolean for preview keyboard to true. I think I can get rid of this
-        this.props.showPreviewKeyboard(true)
+        this.props.showPreviewKeyboard(true);
 
         // Redirects to preview page
-        this.setState({redirect: '/preview'})
+        this.setState({redirect: '/preview'});
     }
 
     imageModal = boolean => {
-        this.setState({addImageModal: boolean})
+        this.setState({addImageModal: boolean});
     }
 
     addImageClick = event => {
-        event.preventDefault()
-        this.imageModal(true)
+        event.preventDefault();
+        this.imageModal(true);
     }
 
     addImage = event => {
-        event.preventDefault()
+        event.preventDefault();
 
         this.setState({
             keyboard: {
@@ -172,12 +166,12 @@ class Post extends Component {
             previewImg: '',
             addImageModal: false,
             imgUrl: ''
-        })
+        });
     }
 
     showPreviewImg = event => {
-        event.preventDefault()
-        this.setState({previewImg: this.state.imgUrl})
+        event.preventDefault();
+        this.setState({previewImg: this.state.imgUrl});
     }
 
     // Renders a single image modal when keyboard preview image is clicked.
@@ -187,17 +181,23 @@ class Post extends Component {
             <Modal open={this.state.openSingleImageModal} onClose={() => this.openSingleImageModal(false)} >
                 <img onError={e => e.target.src=imagefail} src={keyboard.imgs[this.state.showImage]} style={{width: '100%'}}/>
             </Modal>
-        )
+        );
     }
 
     renderImageModal = () => {
         return (
             <Modal small open={this.state.addImageModal} onClose={() => this.imageModal(false)}>
                 <ImageModal>
-                    <div>Add an Image</div>
-                    <form onSubmit={this.showPreviewImg} >
-                        <input value={this.state.imgUrl} onChange={event => this.setState({imgUrl: event.target.value})}/>
-                        <button>Preview Image</button>
+                    <h1>Add an Image</h1>
+                    <form onSubmit={this.showPreviewImg} >'
+                        <TextField
+                            hintText="Add an image"
+                            floatingLabelText="Add an image"
+                            onChange={event => this.setState({imgUrl: event.target.value})}
+                            value={this.state.imgUrl}
+                            autoFocus
+                        />
+                        <RaisedButton primary type="submit" label="Preview image" />
                     </form>
                     {this.state.previewImg ? <ImgPreview img={this.state.previewImg} imgLoadSuccess={this.imgLoadSuccess}/> : null}
                     {this.state.previewImg && this.state.imgLoadSucess ? <AddImgButton addImg={this.addImage}/> : null}
@@ -254,18 +254,52 @@ class Post extends Component {
         else this.setState({imgLoadSucess: boolean})
     }
 
-    nextStep = () => {
-        console.log('next');
-        this.setState({step: this.state.step + 1})
+    nextStep = () => this.setState({step: this.state.step + 1})
+
+    prevStep = () => this.setState({step: this.state.step - 1})
+
+    getKeyboardType = type => {
+        this.setState({
+            keyboard: {...this.state.keyboard, type},
+            step: this.state.step + 1
+        })
+    }
+
+    step0 = () => {
+        return (
+            <div>
+                <Step1Header>
+                    <hr/>
+                    <Helper>What kind of keyboard are you posting?</Helper>
+                </Step1Header>
+                <div style={{marginTop: "3.5rem"}}>
+                    <KeyboardType onClick={() => this.getKeyboardType("custom")}>Custom <i className="fas fa-angle-right"></i></KeyboardType>
+                    <KeyboardType onClick={() => this.getKeyboardType("pre-built")}>Pre Built <i className="fas fa-angle-right"></i></KeyboardType>
+                </div>
+                <Help>Help <i className="fas fa-question-circle"></i></Help>
+            </div>
+        )
     }
 
     step1 = () => {
-        return (
+    return (
             <form onSubmit={this.nextStep}>
-                {this.renderInput('Name', 'name')}
-                {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
-                {this.renderDatalist('Switches', 'switches', this.state.switches)}
-                <SubmitButton onClick={this.nextStep} type="submit">Next <i className="fas fa-angle-right"></i></SubmitButton>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    {this.renderInput('Model', 'name', null, '(Poker 2, Ducky Mini, etc.)')}
+                    <Help><i className="fas fa-question-circle"></i></Help>
+                </div>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
+                    <Help><i className="fas fa-question-circle"></i></Help>
+                </div>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    {this.renderDatalist('Switches', 'switches', this.state.switches)}
+                    <Help><i className="fas fa-question-circle"></i></Help>
+                </div>
+                <div style={{display: "flex", justifyContent: "space-evenly", marginTop: "3rem"}}>
+                    <SubmitButton halfWidth onClick={this.prevStep} type="submit"><i className="fas fa-angle-left"></i> </SubmitButton>
+                    <SubmitButton halfWidth onClick={this.nextStep} type="submit"> <i className="fas fa-angle-right"></i></SubmitButton>
+                </div>
             </form>
         )
     }
@@ -273,18 +307,49 @@ class Post extends Component {
     step2 = () => {
         return (
             <form>
+                <Helper>More information</Helper>
                 {this.renderTabList('Size', 'size', sizes)}
                 {this.renderTabList('Layout', 'layout', layouts)}
                 {this.renderTabList('Condition', 'condition', conditions)}
-                <SubmitButton onClick={this.nextStep} type="submit">Next <i className="fas fa-angle-right"></i></SubmitButton>
+                <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                    <SubmitButton halfWidth onClick={this.prevStep} type="submit"><i className="fas fa-angle-left"></i> </SubmitButton>
+                    <SubmitButton halfWidth onClick={this.nextStep} type="submit"> <i className="fas fa-angle-right"></i></SubmitButton>
+                </div>
             </form>
+        )
+    }
 
+    step3 = () => {
+        return (
+            <div>
+                <Helper>Almost done! Add images if you'd like.</Helper>
+                <ImagesContainer>
+                    {this.state.keyboard.imgs.length > 0
+                        ? <Images
+                            showPreviousImage={this.showPreviousImage}
+                            showNextImage={this.showNextImage}
+                            imgs={this.state.keyboard.imgs}
+                            showImg={this.state.showImage}
+                            currentImage={this.state.showImage}
+                            deleteImg={this.deleteImg}
+                            openModal={() => this.openSingleImageModal(true)}
+                            post
+                        />
+                        : <NoImages/>}
+                </ImagesContainer>
+                <div className="text-center">
+                    <RaisedButton secondary onClick={this.addImageClick} label={this.state.keyboard.imgs.length ? 'Add Image' : 'Add Another Image'} />
+                </div>
+                <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                    <SubmitButton halfWidth onClick={this.prevStep} type="submit"><i className="fas fa-angle-left"></i> </SubmitButton>
+                    <SubmitButton halfWidth onClick={this.submitKeyboard} type="submit">Submit</SubmitButton>
+                </div>
+                <Help>Help <i className="fas fa-question-circle"></i></Help>
+            </div>
         )
     }
 
     render() {
-
-        console.log(this.state.step);
 
         if (this.state.redirect) {
             return <Redirect to={{ pathname: this.state.redirect}} />
@@ -292,32 +357,27 @@ class Post extends Component {
 
         return (
             <PostContainer>
-                {/* {this.renderImageModal()}
-                {this.renderSingleImgModal()} */}
+                <Stepper activeStep={this.state.step}>
+                    <Step>
+                        <StepLabel></StepLabel>
+                    </Step>
+                    <Step>
+                        <StepLabel></StepLabel>
+                    </Step>
+                    <Step>
+                        <StepLabel></StepLabel>
+                    </Step>
+                    <Step>
+                        <StepLabel></StepLabel>
+                    </Step>
+                </Stepper>
+                {this.renderImageModal()}
+                {this.renderSingleImgModal()}
                 <Header>
-                    <p>{this.state.step}/3</p>
-                    <h1>Share/Sell a keyboard <i style={{marginLeft: '5px'}} className="far fa-keyboard"></i></h1>
-                    {this.state.step === 1 ? <Helper>Tell us about your keyboard</Helper> : null}
+                    {this.state.step === 0 ? <h1>Share/Sell a keyboard <i style={{marginLeft: '5px'}} className="far fa-keyboard"></i></h1> : null}
+                    {this.state.step === 1 ? <Helper>Basic Information</Helper> : null}
                 </Header>
-                    {this.state.step === 1 ? this.step1() : this.state.step === 2 ? this.step2() : null}
-                    {/* {this.renderSelect('Size', 'size', sizes)}
-                    {this.renderSelect('Layout', 'layout', layouts)}
-                    {this.renderSelect('Condition', 'condition', conditions)}
-                    <ImagesContainer>
-                        {this.state.keyboard.imgs.length > 0
-                            ? <Images
-                                showPreviousImage={this.showPreviousImage}
-                                showNextImage={this.showNextImage}
-                                imgs={this.state.keyboard.imgs}
-                                showImg={this.state.showImage}
-                                currentImage={this.state.showImage}
-                                deleteImg={this.deleteImg}
-                                openModal={() => this.openSingleImageModal(true)}
-                                post
-                            />
-                            : <NoImages/>}
-                    </ImagesContainer>
-                    <AddImageButton onClick={this.addImageClick}> {!this.state.keyboard.imgs.length ? 'Add Image' : 'Add Another Image'} </AddImageButton>*/}
+                    {this.state.step === 0 ? this.step0() : this.state.step === 1 ? this.step1() : this.state.step === 2 ? this.step2() : this.state.step === 3 ? this.step3() : null}
             </PostContainer>
         )
     }

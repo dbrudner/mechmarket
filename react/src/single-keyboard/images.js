@@ -29,7 +29,7 @@ const ImgContainer = styled.div`
         padding: .3rem;
         cursor: pointer;
         width: 25rem;
-        margin-left: 2rem;
+        margin-left: ${props => props.left ? "1rem" : "2rem"};
     }
 `
 const ImagesContainer = styled.div`

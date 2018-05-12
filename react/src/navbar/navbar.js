@@ -13,44 +13,43 @@ const NavbarContainer = styled.div`
     display: flex;
     justify-content: space-between;
     font-size: 2rem;
-    border-bottom: 3px solid black;
-    background-color: gray;    
 `
 
 const Brand = styled.div`
     display: inline-block;
-    padding: 1rem 1rem 1.3rem 1rem;
-    background-color: white;
-    font-style: italic;
+    font-size: 4.6rem;
+    margin-left: 5rem;
 `
 
 const NavLinks = styled.div`
     display: inline-block;
     color: white;
     margin-left: 2rem;
-
+    margin-top: 2rem;
+    margin-left: 10rem;
     ul {
         display: inline-block;
         margin: 0;
         padding: 0;
+        letter-spacing: 2px;
 
-        li, a {
+        li {
             display: inline-block;
-            margin-left: 2rem;
             cursor: pointer;
+            border-radius: 5px;
+            border: 2px solid;
+            border-color: ${props => props.theme.color1};
+            padding: 5px 10px;
+            color: ${props => props.theme.color1};
             font-size: 1.6rem;
+            font-weight: 700;
             text-transform: uppercase;
-            transition: all .3s;
-            color: white;
             text-decoration: none;
-
-            &:first-child {
-                margin-left: 0;
-            }
+            margin-left: 2rem;
 
             &:hover {
-                transform: translateY(-.5rem);
-                transition: all .3s;
+                color: ${props => props.theme.color3};
+                border-color: ${props => props.theme.color3};
             }
         }
     }
@@ -58,6 +57,7 @@ const NavLinks = styled.div`
 
 const UserContainer = styled.div`
     display: inline-block;
+    margin-top: 1rem;
 
     ul {
         margin: 0;
@@ -121,17 +121,16 @@ class Navbar extends Component {
     render() {
         return (
             <NavbarContainer>
-                <div>
-                    <Brand>
-                        Mechanical Keyboard Classifieds
-                    </Brand>
-                    <NavLinks>
-                        <ul>
-                            <li><Link to='/keyboards'>View Keyboards</Link></li>
-                            <li onClick={this.postKeyboard}>Post</li>
-                        </ul>
-                    </NavLinks>
-                </div>
+                <Brand>
+                    <i className="fas fa-keyboard"></i>
+                </Brand>
+                {!this.props.state.userInfo ? null :
+                <NavLinks>
+                    <ul>
+                        <Link to='/keyboards'><li>View Keyboards</li></Link>
+                        <li onClick={this.postKeyboard}>Post <i className="fas fa-share-square"></i></li>
+                    </ul>
+                </NavLinks>}
                 <UserContainer>
                     {this.renderInfoOrLogin()}
                 </UserContainer>

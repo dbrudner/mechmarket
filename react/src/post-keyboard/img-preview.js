@@ -16,7 +16,7 @@ const ImgContainer = styled.div`
         padding: .3rem;
         cursor: pointer;
         width: 25rem;
-        margin-left: 2rem;
+        margin-left: 1rem;
     }
 `
 
@@ -46,8 +46,5 @@ export default class ImgPreview extends Component {
                 <img onLoad={this.props.imgLoadSuccess} onError={this.handleError} src={this.props.img} />
             </ImgContainer>
         )
-        
     }
-
-
 }

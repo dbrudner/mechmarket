@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
-const Banner = styled.div`
+const HomeContainer = styled.div`
 
     text-align: center;
 
@@ -24,7 +24,7 @@ export default class Home extends Component {
     render() {
         return (
             <div>
-                <Banner>
+                <HomeContainer>
                     <h1>
                         Welcome to Mechanical Keyboard Classifieds
                     </h1>
@@ -34,7 +34,7 @@ export default class Home extends Component {
                     <p>
                         To post a keyboard, login or sign up
                     </p>
-                </Banner>
+                </HomeContainer>
             </div>
         )
     }

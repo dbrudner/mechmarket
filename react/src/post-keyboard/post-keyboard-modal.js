@@ -26,10 +26,13 @@ class Signup extends Component {
     };
 
     onCloseModal = () => {
-        this.setState({ open: false }, () => {
-            setTimeout(() => this.props.postKeyboard(false), 300)            
-        }); 
-
+        console.log("CLO")
+        // this.setState({ open: false }
+        // , () => {
+        //     console.log(this.state);
+        //     setTimeout(() => this.props.postKeyboard(false), 300)            
+        // });
+        this.props.postKeyboard(false) 
     };
 
     showPreview = () => {
@@ -38,11 +41,15 @@ class Signup extends Component {
 
     render() {
         const { open } = this.state;
-        return (
-            <Modal open={open} onClose={this.onCloseModal}>
-                <PostKeyboard closeModal={this.onCloseModal}/>
-            </Modal>
-        );
+
+        if (open) {
+            return (
+                <Modal open={open} showCloseIcon={false} onClose={this.onCloseModal}>
+                    <PostKeyboard closeModal={this.onCloseModal}/>
+                </Modal>
+            );
+        }
+        
     }
 }
 
