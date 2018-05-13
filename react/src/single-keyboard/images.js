@@ -24,17 +24,16 @@ const ImgContainer = styled.div`
         position: absolute;
         top: 0;
         bottom: 0;
-        margin: auto;
+        margin: ${props => props.post ? 0 : "3rem auto"};
         border: 1px solid #c7c4c4;
-        padding: .3rem;
+        padding: ${props => props.post ? 0 : ".3rem"};
         cursor: pointer;
-        width: 25rem;
-        margin-left: ${props => props.left ? "1rem" : "2rem"};
+        width: ${props => props.post ? "22rem" : "25rem"};
+        margin-left: ${props => props.left ? "1rem" : "2.6rem"};
     }
 `
 const ImagesContainer = styled.div`
     padding-top: 1rem;
-    border: 2px solid #f3f3f3
     border-radius: 5px;
     margin-bottom: 2rem;
     text-align: left;
@@ -47,26 +46,24 @@ const Helper = styled.div`
 `
 
 const Delete = styled.div`
+    background-color: ${props => props.theme.color4};
     text-align: center;
+    font-size: 1.2rem;
+    margin: 1rem auto;
+    display: inline-block;
+    color: #8c8c8c;
 
-    div {
-        text-align: center;
-        font-size: 1.2rem;
-        margin: 1rem auto;
-        display: inline-block;
-        color: #8c8c8c;
-
-        :hover {
-            color: #9696ff;
-            transition: all .2s;
-            cursor: pointer;
-        }
-
-        span {
-            margin-left: .5rem;
-            font-size: 1.6rem;
-        }
+    :hover {
+        color: #9696ff;
+        transition: all .2s;
+        cursor: pointer;
     }
+
+    span {
+        margin-left: .5rem;
+        font-size: 1.6rem;
+    }
+    
 
 `
 
@@ -96,7 +93,7 @@ export default class Images extends Component {
         if (this.state.imgs.length - 1 === this.state.currentImage) {
             this.props.showPreviousImage()
         }
-        this.props.deleteImg()        
+        this.props.deleteImg()
     }
 
     render() {
@@ -114,21 +111,9 @@ export default class Images extends Component {
                     </div>
                 </Arrows>
 
-                <ImgContainer>
+                <ImgContainer post={this.props.post}>
                     <img onError={e => e.target.src=imagefail} onClick={this.handleClick} src={this.props.imgs[this.props.currentImage]} />
                 </ImgContainer>
-                {this.props.post
-                ?
-                <Delete>
-                    <div onClick={this.deleteImg}>
-                        Delete Picture
-                        <span><i className="fas fa-trash-alt"></i></span>
-                    </div>
-                </Delete>
-                : <Helper>Click to Enlarge</Helper>
-
-            }
-
             </ImagesContainer>
         )
     }

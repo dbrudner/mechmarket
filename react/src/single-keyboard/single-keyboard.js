@@ -61,6 +61,10 @@ class SingleKeyboard extends Component {
         }
     }
 
+    componentDidMount() {
+        console.log(this.state);
+    }
+
     componentWillReceiveProps(nextProps, nextState) {
         const keyboardId = this.props.match.params.param
 

@@ -11,11 +11,11 @@ const ImgContainer = styled.div`
 
     img {
 
-        margin: 3rem auto;
+        margin: ${props => props.post ? 0 : "3rem auto"};
         border: 1px solid #c7c4c4;
-        padding: .3rem;
+        padding: ${props => props.post ? 0 : ".3rem"};
         cursor: pointer;
-        width: 25rem;
+        width: ${props => props.post ? "22rem" : "25rem"};
         margin-left: 1rem;
     }
 `
@@ -41,9 +41,11 @@ export default class ImgPreview extends Component {
     }
 
     render() {
+        console.log(this.props.post);
+
         return (
-            <ImgContainer>
-                <img onLoad={this.props.imgLoadSuccess} onError={this.handleError} src={this.props.img} />
+            <ImgContainer post={this.props.post}>
+                <img onLoad={() => this.props.imgLoadSuccess(true)} onError={this.handleError} src={this.props.img} />
             </ImgContainer>
         )
     }

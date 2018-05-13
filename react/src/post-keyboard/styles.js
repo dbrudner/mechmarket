@@ -67,29 +67,42 @@ export const Header = styled.div`
 `
 
 export const AddImageButton = styled.div`
-    background-color: ${props => props.theme.color3};
+    background-color: ${props => props.theme.color1};
     text-align: center;
     color: white;
     text-transform: uppercase;
     letter-spacing: 2px;
     padding: 10px 0;
     cursor: pointer;
-    border: 1px solid ${props => props.theme.color3};
+    border: 1px solid ${props => props.theme.color1};
     font-size: 1.6rem;
     border-radius: 5px;
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 3rem;
 
     :hover {
-        color: ${props => props.theme.color3};
+        color: ${props => props.theme.color1};
         background-color: white;
     }
 `
 
 export const ImageModal = styled.div`
-    padding: 5rem;
+    h1 {
+        text-align: center;
+        text-transform: uppercase;
+        color: ${props => props.theme.grayText1}
+    }
+
+
+    padding: 2rem;
 `
 
 export const ImagesContainer = styled.div`
     margin: 3rem 0;
+    height: 200px;
+    border: 2px solid ${props => props.theme.grayText1};
+
 `
 
 export const KeyboardType = styled.div`
@@ -135,4 +148,42 @@ export const Help = styled.h5`
     margin-top: 4rem;
     color: ${props => props.theme.color1};
     text-align: left;
+`
+
+export const AddImgPlusBtn = styled.div`
+    position: absolute;
+    top: ${props => props.topMrg ? "31px" : "5px"};
+    right: ${props => props.topMrg ? "35px" : "26px"};
+    font-size: 3.6rem;
+    color: ${props => props.theme.color1};
+    cursor: pointer;
+    transition: all .2s;
+
+
+    :hover {
+        transform: scale(1.1);
+        transition: all .2s;
+    }
+`
+
+export const RemoveImgBtn = styled.div`
+    position: absolute;
+    top: 75px;
+    right: 35px;
+    font-size: 3.6rem;
+    color: ${props => props.theme.textWarning};
+    cursor: pointer;
+    transition: all .2s;
+
+    :hover {
+        transform: scale(1.1);
+        transition: all .2s;
+    }
+`
+
+export const InputError = styled.div`
+    color: ${props => props.theme.textWarning}
+    font-size: 1.6rem;
+    text-align: center;
+    margin-top: 2.5rem;
 `

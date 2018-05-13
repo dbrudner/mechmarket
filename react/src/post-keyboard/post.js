@@ -23,7 +23,7 @@ import {
   } from 'material-ui/Stepper';
 
 import {sizes, layouts, conditions} from './select-arrays'
-import {Help, Step1Header, PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer, Helper, TabHeader, KeyboardType} from './styles'
+import {RemoveImgBtn, InputError, AddImgPlusBtn, Help, Step1Header, PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer, Helper, TabHeader, KeyboardType} from './styles'
 
 import ImgPreview from './img-preview'
 
@@ -49,9 +49,19 @@ class Post extends Component {
             imgUrl: '',
             previewImg: '',
             showImage: 0,
-            imgLoadSucess: null,
-            step: 3,
-            type: null
+            imgLoadSuccess: true,
+            step: 0,
+            type: null,
+        }
+    }
+
+    handleKeyDown = e => {
+        if (e.keyCode ===  37 && this.state.step > 0) {
+            this.prevStep()
+        }
+
+        if (e.keyCode === 39 || e.keyCode === 13 && this.state.step <= 3) {
+            this.nextStep()
         }
     }
 
@@ -72,6 +82,8 @@ class Post extends Component {
         const switches = keyboardReducer(keyboards, 'switches')
         const keycaps = keyboardReducer(keyboards, 'keycaps')
 
+
+        document.addEventListener("keydown", this.handleKeyDown);
     }
 
     handleChange = (id, value) => this.setState({keyboard: {...this.state.keyboard, [id]: value}})
@@ -91,32 +103,12 @@ class Post extends Component {
         )
     }
 
-    moreInfo = key => {
-        console.log(key);
-    }
-
     renderTabList = (label, key, options) => {
-
-        // <ReactTooltip place="bottom" id='step0help' globalEventOff='click'>
-        //             <div>
-        //                 <h3>
-        //                     Click one of the two buttons to get started.
-        //                 </h3>
-        //                 <div>
-        //                     A <strong>Custom</strong> keyboard has been soldered or assembled and put together by an individual.
-        //                 </div>
-        //                 <div>
-        //                     A <strong>Pre-built</strong> keyboard is a keyboard originally made by a manufacturer.
-        //                 </div>
-        //             </div>
-        //         </ReactTooltip>
-        //     <Help data-tip data-for="step0help" data-event='click focus'>Help <i className="fas fa-question-circle"></i></Help>
-
         const renderHelper= () => {
             if (key === "size") {
                 return (
                     <div onClick={() => this.moreInfo(key)} style={{marginLeft: "5px", color: "#01579B", cursor: "pointer"}}>
-                        <span style={{fontSize: "2rem"}} data-tip data-for="size" data-event='click focus'><i className="fas fa-question-circle"></i></span>                    
+                        <span style={{fontSize: "2rem"}} data-tip data-for="size" data-event='click focus'><i className="fas fa-question-circle"></i></span>
                         <ReactTooltip id='size' place='bottom' className='whiteBackground' globalEventOff='click'>
                             <div>
                                 <img style={{width: "60rem"}} src="https://www.qwerkeys.co.uk/wp-content/uploads/2013/11/keyboard_common-sizes1.jpg" />
@@ -124,17 +116,25 @@ class Post extends Component {
                         </ReactTooltip>
                     </div>
                 )
-            } 
-            
-            if (key === "layout") {
-                <span onClick={() => this.moreInfo(key)} style={{marginLeft: "5px", color: "#01579B", cursor: "pointer"}}>
-                    <i className="fas fa-question-circle"></i>
-                </span>
             }
 
-            else return null;
+            if (key === "layout") {
+                return (
+                    <span onClick={() => this.moreInfo(key)} style={{marginLeft: "5px", color: "#01579B", cursor: "pointer"}}>
+                        <span style={{fontSize: "2rem"}} data-tip data-for="layout" data-event='click focus'><i className="fas fa-question-circle"></i></span>
+                            <ReactTooltip id='layout' place='bottom' className='whiteBackground' globalEventOff='click'>
+                                <div>
+                                    <img style={{width: "60rem"}} src="https://static.webshopapp.com/shops/216959/files/117538235/iso-vs-ansi-min.png" />
+                                </div>
+                            </ReactTooltip>
+                    </span>
+                )
+            }
+
+            return null;
         }
-        
+
+        const handleChange = e => {this.setState({[key]: e.target.value})}
 
         return (
             <div style={{marginTop: "2.5rem"}}>
@@ -142,7 +142,7 @@ class Post extends Component {
                     <div><h3>{label}</h3></div>
                     {renderHelper()}
                 </TabHeader>
-                <RadioButtonGroup name={label} onChange={value => this.handleChange(key, value)}>
+                <RadioButtonGroup name={label} onChange={handleChange}>
                     {options.map(option => <RadioButton key={option} value={option} label={option}></RadioButton>)}
                 </RadioButtonGroup>
             </div>
@@ -174,19 +174,17 @@ class Post extends Component {
     submitKeyboard = event => {
 
         // Keyboard object with all state input values and userid
-        const {keyboard} = this.state
+        const {keyboard} = this.state;
 
-        // Closes Modal
-        this.props.closeModal();
-
+        console.log(keyboard);
         // Puts keyboard into redux store
         this.props.previewKeyboard(keyboard);
 
-        // Sets redux store boolean for preview keyboard to true. I think I can get rid of this
-        this.props.showPreviewKeyboard(true);
-
         // Redirects to preview page
-        this.setState({redirect: '/preview'});
+        this.setState({redirect: '/preview'}, () => {
+            this.props.closeModal();            
+        });
+
     }
 
     imageModal = boolean => {
@@ -213,7 +211,13 @@ class Post extends Component {
 
     showPreviewImg = event => {
         event.preventDefault();
+        if (!this.state.imgUrl.trim()) return
+
         this.setState({previewImg: this.state.imgUrl});
+    }
+
+    onImageLoadFail = e => {
+        e.target.src = imagefail
     }
 
     // Renders a single image modal when keyboard preview image is clicked.
@@ -227,10 +231,13 @@ class Post extends Component {
     }
 
     renderImageModal = () => {
+        console.log(this.state.imgLoadSuccess);
+
         return (
             <Modal small open={this.state.addImageModal} onClose={() => this.imageModal(false)}>
                 <ImageModal>
                     <h1>Add an Image</h1>
+                    {this.state.imgLoadSuccess === false ? <p>Error</p> : null}
                     <form onSubmit={this.showPreviewImg} >'
                         <TextField
                             hintText="Add an image"
@@ -242,7 +249,7 @@ class Post extends Component {
                         <RaisedButton primary type="submit" label="Preview image" />
                     </form>
                     {this.state.previewImg ? <ImgPreview img={this.state.previewImg} imgLoadSuccess={this.imgLoadSuccess}/> : null}
-                    {this.state.previewImg && this.state.imgLoadSucess ? <AddImageButton onClick={this.addImage}>Add Image</AddImageButton> : null}
+                    {this.state.imgLoadSuccess ? <AddImageButton onClick={this.addImage}>Add Image</AddImageButton> : null}
                 </ImageModal>
             </Modal>
         )
@@ -292,8 +299,19 @@ class Post extends Component {
     }
 
     imgLoadSuccess = boolean => {
-        if (!boolean) return this.setState({imgLoadSucess: boolean, imgUrl: ''})
-        else this.setState({imgLoadSucess: boolean})
+
+        console.log(boolean);
+
+        if (!boolean) return this.setState({
+            imgLoadSuccess: boolean,
+            imgUrl: '',
+            imgInputError: "The URL you entered isn't an image :("
+        })
+
+        else this.setState({
+            imgLoadSuccess: true,
+            imgInputError: ""
+        })
     }
 
     nextStep = () => this.setState({step: this.state.step + 1})
@@ -351,7 +369,7 @@ class Post extends Component {
                     <ReactTooltip place="bottom" id='model' globalEventOff='click'>
                     <h3>Add a generic model or name for your keyboard</h3>
                     <p>You'll be able to add a longer description later</p>
-                    </ReactTooltip>                    
+                    </ReactTooltip>
                     <Help data-tip data-for="model" data-event='click focus'><i className="fas fa-question-circle"></i></Help>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
@@ -359,14 +377,14 @@ class Post extends Component {
                     <ReactTooltip place="bottom" id='switches' globalEventOff='click'>
                     <p>This form has autocomplete. You may find your <strong>switches</strong> when you begin typing.</p>
                     <p>If your switches need further explanation, please use the <strong>description field</strong> later on in the form.</p>
-                    </ReactTooltip>                    
+                    </ReactTooltip>
                     <Help data-tip data-for="switches" data-event='click focus'><i className="fas fa-question-circle"></i></Help>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps, "(Stock, DSA, PBT Blanks, etc.)")}
                     <ReactTooltip place="bottom" id='keycaps' globalEventOff='click'>
                     <p>This form has autocomplete. You may find your <strong>keycaps</strong> when you begin typing.</p>
-                    </ReactTooltip>                    
+                    </ReactTooltip>
                     <Help data-tip data-for="keycaps" data-event='click focus'><i className="fas fa-question-circle"></i></Help>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly", marginTop: "3rem"}}>
@@ -399,26 +417,48 @@ class Post extends Component {
                 <Helper>Almost done! Add images if you'd like.</Helper>
                 <ImagesContainer>
                     {this.state.keyboard.imgs.length > 0
-                        ? <Images
-                            showPreviousImage={this.showPreviousImage}
-                            showNextImage={this.showNextImage}
-                            imgs={this.state.keyboard.imgs}
-                            showImg={this.state.showImage}
-                            currentImage={this.state.showImage}
-                            deleteImg={this.deleteImg}
-                            openModal={() => this.openSingleImageModal(true)}
-                            post
-                        />
-                        : null}
+                        ?
+                        <div style={{position: "relative"}}>
+                            <Images
+                                showPreviousImage={this.showPreviousImage}
+                                showNextImage={this.showNextImage}
+                                imgs={this.state.keyboard.imgs}
+                                showImg={this.state.showImage}
+                                currentImage={this.state.showImage}
+                                deleteImg={this.deleteImg}
+                                openModal={() => this.openSingleImageModal(true)}
+                                post
+                            />
+                            <AddImgPlusBtn topMrg onClick={this.addImageClick}>
+                                <i className="fas fa-plus-circle"></i>
+                            </AddImgPlusBtn>
+                            <RemoveImgBtn onClick={this.deleteImg}>
+                                <i className="fas fa-minus-circle"></i>
+                            </RemoveImgBtn>
+                        </div>
+                        :
+                        <div style={{position: "relative"}}>
+                            <AddImgPlusBtn onClick={this.addImageClick}>
+                                <i className="fas fa-plus-circle"></i>
+                            </AddImgPlusBtn>
+                        </div>
+                    }
                 </ImagesContainer>
                 <div className="text-center">
-                    <AddImageButton onClick={this.addImageClick}>{this.state.keyboard.imgs.length <= 0 ? 'Add Imasdfage' : 'Add Another Image'} <i className="fas fa-plus-circle"></i></AddImageButton>
+                    <AddImageButton onClick={this.addImageClick}>Add Image <i className="fas fa-plus-circle"></i></AddImageButton>
                 </div>
-                <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                <div style={{display: "flex", justifyContent: "space-evenly", marginTop: "10rem"}}>
                     <SubmitButton halfWidth onClick={this.prevStep} type="submit"><i className="fas fa-angle-left"></i> </SubmitButton>
                     <SubmitButton halfWidth onClick={this.submitKeyboard} type="submit">Submit</SubmitButton>
                 </div>
-                <Help>Help <i className="fas fa-question-circle"></i></Help>
+                <ReactTooltip place="bottom" id='images' globalEventOff='click'>
+                    <h3>Add images of your keyboard</h3>
+                    <ul>
+                        <li>Add up to 6 images.</li>
+                        <li>You can add/remove images later.</li>
+                    </ul>
+                    </ReactTooltip>
+                <Help data-tip data-for="images" data-event='click focus'>Help <i className="fas fa-question-circle"></i></Help>
             </div>
         )
     }
