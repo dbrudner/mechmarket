@@ -4,10 +4,16 @@ export const PostContainer = styled.div`
     padding: 0 2rem 2rem 2rem;
 `
 
-export const TabHeader = styled.h3`
-    font-size: 1.6rem;
-    margin: 5px 0;
-    color: ${props => props.theme.grayText};
+export const TabHeader = styled.div`
+    display: flex;
+
+    div {
+        h3 {
+            font-size: 1.6rem;
+            margin: 5px 0;
+            color: ${props => props.theme.grayText};
+        }
+    }
 `
 
 export const Helper = styled.p`
@@ -15,6 +21,8 @@ export const Helper = styled.p`
     color: ${props => props.theme.grayText};
     font-size: 1.4rem;
     text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
 `
 
 export const Label = styled.span`
@@ -45,7 +53,6 @@ export const SubmitButton = styled.div`
 
 export const Header = styled.div`
 
-
     h1 {
         text-transform: uppercase;
         text-align: center;
@@ -59,9 +66,22 @@ export const Header = styled.div`
     }
 `
 
-export const AddImageButton = styled.button`
-    display: block;
-    margin: 1.5rem auto;
+export const AddImageButton = styled.div`
+    background-color: ${props => props.theme.color3};
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 0;
+    cursor: pointer;
+    border: 1px solid ${props => props.theme.color3};
+    font-size: 1.6rem;
+    border-radius: 5px;
+
+    :hover {
+        color: ${props => props.theme.color3};
+        background-color: white;
+    }
 `
 
 export const ImageModal = styled.div`
@@ -110,8 +130,9 @@ export const Step1Header = styled.div`
 
 export const Help = styled.h5`
     cursor: pointer;
+    display: inline-block;
     font-size: 1.6rem;
     margin-top: 4rem;
-    color: ${props => props.theme.color1};        
+    color: ${props => props.theme.color1};
     text-align: left;
 `

@@ -9,7 +9,7 @@ class PostKeyboard extends Component {
     render() {
         console.log()
         return (
-            <div style={{height: "600px", width: "320px"}}>
+            <div style={{height: "650px", width: "320px"}}>
                 {this.props.state.userInfo ? <Post closeModal={this.props.closeModal}/> : <NoUserInfo/>}
             </div>
         )

@@ -21,3 +21,8 @@ body {
 .text-center {
   text-align: center;
 }
+
+.whiteBackground {
+  background-color: white !important;
+  border: 2px solid black !important;
+}

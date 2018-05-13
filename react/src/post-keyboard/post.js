@@ -7,6 +7,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {previewKeyboard, showPreviewKeyboard} from '../actions'
 import Modal from 'react-responsive-modal'
+import ReactTooltip from 'react-tooltip'
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -25,7 +26,6 @@ import {sizes, layouts, conditions} from './select-arrays'
 import {Help, Step1Header, PostContainer, Label, SubmitButton, Header, AddImageButton, ImageModal, ImagesContainer, Helper, TabHeader, KeyboardType} from './styles'
 
 import ImgPreview from './img-preview'
-import AddImgButton from './add-img-button'
 
 import Images from '../single-keyboard/images'
 import NoImages from '../single-keyboard/no-images'
@@ -50,7 +50,7 @@ class Post extends Component {
             previewImg: '',
             showImage: 0,
             imgLoadSucess: null,
-            step: 0,
+            step: 3,
             type: null
         }
     }
@@ -96,9 +96,52 @@ class Post extends Component {
     }
 
     renderTabList = (label, key, options) => {
+
+        // <ReactTooltip place="bottom" id='step0help' globalEventOff='click'>
+        //             <div>
+        //                 <h3>
+        //                     Click one of the two buttons to get started.
+        //                 </h3>
+        //                 <div>
+        //                     A <strong>Custom</strong> keyboard has been soldered or assembled and put together by an individual.
+        //                 </div>
+        //                 <div>
+        //                     A <strong>Pre-built</strong> keyboard is a keyboard originally made by a manufacturer.
+        //                 </div>
+        //             </div>
+        //         </ReactTooltip>
+        //     <Help data-tip data-for="step0help" data-event='click focus'>Help <i className="fas fa-question-circle"></i></Help>
+
+        const renderHelper= () => {
+            if (key === "size") {
+                return (
+                    <div onClick={() => this.moreInfo(key)} style={{marginLeft: "5px", color: "#01579B", cursor: "pointer"}}>
+                        <span style={{fontSize: "2rem"}} data-tip data-for="size" data-event='click focus'><i className="fas fa-question-circle"></i></span>                    
+                        <ReactTooltip id='size' place='bottom' className='whiteBackground' globalEventOff='click'>
+                            <div>
+                                <img style={{width: "60rem"}} src="https://www.qwerkeys.co.uk/wp-content/uploads/2013/11/keyboard_common-sizes1.jpg" />
+                            </div>
+                        </ReactTooltip>
+                    </div>
+                )
+            } 
+            
+            if (key === "layout") {
+                <span onClick={() => this.moreInfo(key)} style={{marginLeft: "5px", color: "#01579B", cursor: "pointer"}}>
+                    <i className="fas fa-question-circle"></i>
+                </span>
+            }
+
+            else return null;
+        }
+        
+
         return (
             <div style={{marginTop: "2.5rem"}}>
-                <TabHeader>{label}<span onClick={() => this.moreInfo(key)} style={{marginLeft: "5px", color: "#01579B", cursor: "pointer"}}><i className="fas fa-question-circle"></i></span></TabHeader>
+                <TabHeader>
+                    <div><h3>{label}</h3></div>
+                    {renderHelper()}
+                </TabHeader>
                 <RadioButtonGroup name={label} onChange={value => this.handleChange(key, value)}>
                     {options.map(option => <RadioButton key={option} value={option} label={option}></RadioButton>)}
                 </RadioButtonGroup>
@@ -113,11 +156,11 @@ class Post extends Component {
     };
 
 
-    renderDatalist = (label, key, options) => {
+    renderDatalist = (label, key, options, helper) => {
         return (
             <div>
                 <AutoComplete
-                    hintText={label}
+                    hintText={helper}
                     dataSource={options}
                     onUpdateInput={value => this.setState({keyboard: {...this.state.keyboard, [key]: value}})}
                     floatingLabelText={label}
@@ -151,12 +194,11 @@ class Post extends Component {
     }
 
     addImageClick = event => {
-        event.preventDefault();
+        console.log('hi')
         this.imageModal(true);
     }
 
-    addImage = event => {
-        event.preventDefault();
+    addImage = () => {
 
         this.setState({
             keyboard: {
@@ -200,7 +242,7 @@ class Post extends Component {
                         <RaisedButton primary type="submit" label="Preview image" />
                     </form>
                     {this.state.previewImg ? <ImgPreview img={this.state.previewImg} imgLoadSuccess={this.imgLoadSuccess}/> : null}
-                    {this.state.previewImg && this.state.imgLoadSucess ? <AddImgButton addImg={this.addImage}/> : null}
+                    {this.state.previewImg && this.state.imgLoadSucess ? <AddImageButton onClick={this.addImage}>Add Image</AddImageButton> : null}
                 </ImageModal>
             </Modal>
         )
@@ -262,6 +304,13 @@ class Post extends Component {
         this.setState({
             keyboard: {...this.state.keyboard, type},
             step: this.state.step + 1
+        }, () => {
+            if (type === 'custom') {
+                console.log('hi');
+                this.setState({
+                    keyboard: {...this.state.keyboard, name: 'Custom'}
+                })
+            }
         })
     }
 
@@ -276,25 +325,49 @@ class Post extends Component {
                     <KeyboardType onClick={() => this.getKeyboardType("custom")}>Custom <i className="fas fa-angle-right"></i></KeyboardType>
                     <KeyboardType onClick={() => this.getKeyboardType("pre-built")}>Pre Built <i className="fas fa-angle-right"></i></KeyboardType>
                 </div>
-                <Help>Help <i className="fas fa-question-circle"></i></Help>
+                <ReactTooltip place="bottom" id='step0help' globalEventOff='click'>
+                    <div>
+                        <h3>
+                            Click one of the two buttons to get started.
+                        </h3>
+                        <div>
+                            A <strong>Custom</strong> keyboard has been soldered or assembled and put together by an individual.
+                        </div>
+                        <div>
+                            A <strong>Pre-built</strong> keyboard is a keyboard originally made by a manufacturer.
+                        </div>
+                    </div>
+                </ReactTooltip>
+                <Help data-tip data-for="step0help" data-event='click focus'>Help <i className="fas fa-question-circle"></i></Help>
             </div>
         )
     }
 
     step1 = () => {
-    return (
+        return (
             <form onSubmit={this.nextStep}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {this.renderInput('Model', 'name', null, '(Poker 2, Ducky Mini, etc.)')}
-                    <Help><i className="fas fa-question-circle"></i></Help>
+                    <ReactTooltip place="bottom" id='model' globalEventOff='click'>
+                    <h3>Add a generic model or name for your keyboard</h3>
+                    <p>You'll be able to add a longer description later</p>
+                    </ReactTooltip>                    
+                    <Help data-tip data-for="model" data-event='click focus'><i className="fas fa-question-circle"></i></Help>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps)}
-                    <Help><i className="fas fa-question-circle"></i></Help>
+                    {this.renderDatalist('Switches', 'switches', this.state.switches, '(MX Cherry Blue, etc.)')}
+                    <ReactTooltip place="bottom" id='switches' globalEventOff='click'>
+                    <p>This form has autocomplete. You may find your <strong>switches</strong> when you begin typing.</p>
+                    <p>If your switches need further explanation, please use the <strong>description field</strong> later on in the form.</p>
+                    </ReactTooltip>                    
+                    <Help data-tip data-for="switches" data-event='click focus'><i className="fas fa-question-circle"></i></Help>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    {this.renderDatalist('Switches', 'switches', this.state.switches)}
-                    <Help><i className="fas fa-question-circle"></i></Help>
+                    {this.renderDatalist('Keycaps', 'keycaps', this.state.keycaps, "(Stock, DSA, PBT Blanks, etc.)")}
+                    <ReactTooltip place="bottom" id='keycaps' globalEventOff='click'>
+                    <p>This form has autocomplete. You may find your <strong>keycaps</strong> when you begin typing.</p>
+                    </ReactTooltip>                    
+                    <Help data-tip data-for="keycaps" data-event='click focus'><i className="fas fa-question-circle"></i></Help>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly", marginTop: "3rem"}}>
                     <SubmitButton halfWidth onClick={this.prevStep} type="submit"><i className="fas fa-angle-left"></i> </SubmitButton>
@@ -311,7 +384,7 @@ class Post extends Component {
                 {this.renderTabList('Size', 'size', sizes)}
                 {this.renderTabList('Layout', 'layout', layouts)}
                 {this.renderTabList('Condition', 'condition', conditions)}
-                <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                <div style={{display: "flex", justifyContent: "space-evenly", marginTop: "3rem"}}>
                     <SubmitButton halfWidth onClick={this.prevStep} type="submit"><i className="fas fa-angle-left"></i> </SubmitButton>
                     <SubmitButton halfWidth onClick={this.nextStep} type="submit"> <i className="fas fa-angle-right"></i></SubmitButton>
                 </div>
@@ -320,6 +393,7 @@ class Post extends Component {
     }
 
     step3 = () => {
+
         return (
             <div>
                 <Helper>Almost done! Add images if you'd like.</Helper>
@@ -335,10 +409,10 @@ class Post extends Component {
                             openModal={() => this.openSingleImageModal(true)}
                             post
                         />
-                        : <NoImages/>}
+                        : null}
                 </ImagesContainer>
                 <div className="text-center">
-                    <RaisedButton secondary onClick={this.addImageClick} label={this.state.keyboard.imgs.length ? 'Add Image' : 'Add Another Image'} />
+                    <AddImageButton onClick={this.addImageClick}>{this.state.keyboard.imgs.length <= 0 ? 'Add Imasdfage' : 'Add Another Image'} <i className="fas fa-plus-circle"></i></AddImageButton>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <SubmitButton halfWidth onClick={this.prevStep} type="submit"><i className="fas fa-angle-left"></i> </SubmitButton>

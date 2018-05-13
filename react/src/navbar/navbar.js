@@ -27,6 +27,7 @@ const NavLinks = styled.div`
     margin-left: 2rem;
     margin-top: 2rem;
     margin-left: 10rem;
+    
     ul {
         display: inline-block;
         margin: 0;
